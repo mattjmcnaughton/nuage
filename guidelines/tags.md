@@ -9,3 +9,4 @@
   - The "name" MAY include an indicator of environment, but it is not necessary.
     The tag is the source of truth.
 - Tags SHOULD use full names (i.e. "development" instead of "dev").
+- All Terraform managed infrastructure should have a `Terraform = "true"` tag.
