@@ -1,0 +1,9 @@
+---
+- hosts: all
+
+  tasks:
+    - name: Install packages
+      apt:
+        name: curl
+        state: present
+      become: yes
