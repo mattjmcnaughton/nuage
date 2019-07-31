@@ -1,0 +1,22 @@
+{
+  "builders": [{
+    "type": "vagrant",
+    "communicator": "ssh",
+    "source_path": "../share/boxes/ubuntu-1804-20190726.box",
+    "provider": "virtualbox",
+    "box_name": "ubuntu/bionic64",
+    "teardown_method": "destroy",
+    "add_force": true,
+    "skip_package": true
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "script": "../share/scripts/install-ansible.sh"
+  }, {
+    "type": "ansible",
+    "playbook_file": "./playbook.yml",
+    "ansible_env_vars": [
+      "ANSIBLE_ROLES_PATH=../share/roles"
+    ]
+  }]
+}
