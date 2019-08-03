@@ -18,5 +18,8 @@
     "ansible_env_vars": [
       "ANSIBLE_ROLES_PATH=../share/roles"
     ]
+  }, {
+    "type": "inspec",
+    "profile": "../share/tests/linux-baseline"
   }]
 }
