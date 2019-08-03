@@ -2,5 +2,11 @@
 - hosts: all
   become: yes
 
-  roles:
-    - dev-sec.os-hardening
+  tasks:
+    - name: Include os-hardening role
+      include_role:
+        name: dev-sec.os-hardening
+      vars:
+        oss_auth_pw_max_age: 99999
+        # We will manage network access ourselves in a separate role.
+        ufw_manage_defaults: false
