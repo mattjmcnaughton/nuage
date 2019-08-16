@@ -1,0 +1,6 @@
+galaxy_info:
+  author: mattjmcnaughton
+  description: Role for generating entropy on a system.
+  license: Apache
+
+dependencies: []

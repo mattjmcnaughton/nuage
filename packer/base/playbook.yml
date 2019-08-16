@@ -3,8 +3,9 @@
   become: yes
 
   tasks:
-    - name: Include os-hardening role
-      include_role:
+    - include_role:
+        name: mattjmcnaughton.entropy-generator
+    - include_role:
         name: dev-sec.os-hardening
       vars:
         oss_auth_pw_max_age: 99999

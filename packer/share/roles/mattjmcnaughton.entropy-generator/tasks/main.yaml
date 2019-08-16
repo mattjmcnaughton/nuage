@@ -1,0 +1,16 @@
+---
+- name: Install haveged (entropy-generation) package
+  apt:
+    name: haveged
+    state: present
+
+# `haveged` should start automatically after the apt install, but just to be
+# safe.
+- name: Ensure haveged service started
+  service:
+    name: haveged
+    state: started
+
+- name: Sleep to allow entropy generation
+  wait_for:
+    timeout: 30
