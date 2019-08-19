@@ -8,6 +8,27 @@
     "teardown_method": "destroy",
     "add_force": true,
     "skip_package": true
+  }, {
+    "type": "amazon-ebs",
+    "region": "us-east-1",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "name": "ubuntu/images/*ubuntu-bionic-18.04-amd64-server-*",
+        "root-device-type": "ebs"
+      },
+      "owners": ["099720109477"],
+      "most_recent": true
+    },
+    "instance_type": "m3.medium",
+    "ssh_username": "ubuntu",
+    "ami_name": "base-{{isotime | clean_resource_name}}",
+    "tags": {
+      "project": "nuage",
+      "Name": "base-{{isotime | clean_resource_name}}",
+      "name": "base-{{isotime | clean_resource_name}}",
+      "git": "TODO"
+    }
   }],
   "provisioners": [{
     "type": "shell",
