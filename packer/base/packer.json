@@ -6,8 +6,7 @@
     "provider": "virtualbox",
     "box_name": "ubuntu/bionic64",
     "teardown_method": "destroy",
-    "add_force": true,
-    "skip_package": true
+    "add_force": true
   }, {
     "type": "amazon-ebs",
     "region": "us-east-1",
