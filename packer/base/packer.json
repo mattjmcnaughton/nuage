@@ -42,5 +42,9 @@
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],
     "profile": "../share/tests/linux-baseline"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/tests/ssh-baseline"
   }]
 }
