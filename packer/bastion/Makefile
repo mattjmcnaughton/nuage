@@ -5,6 +5,9 @@ lint:
 test:
 	packer build -only=vagrant packer.json
 
+debug:
+	packer build -debug -only=vagrant packer.json
+
 build:
 	packer build -only=amazon-ebs packer.json
 
