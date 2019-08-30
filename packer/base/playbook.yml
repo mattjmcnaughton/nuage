@@ -6,6 +6,8 @@
     - include_role:
         name: mattjmcnaughton.entropy-generator
     - include_role:
+        name: mattjmcnaughton.system-security-updates
+    - include_role:
         name: dev-sec.os-hardening
       vars:
         oss_auth_pw_max_age: 99999

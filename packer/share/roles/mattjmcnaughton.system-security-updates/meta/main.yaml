@@ -1,0 +1,6 @@
+galaxy_info:
+  author: mattjmcnaughton
+  description: Role for ensuring we automatically run system security updates.
+  license: Apache
+
+dependencies: []

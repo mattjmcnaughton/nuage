@@ -1,0 +1,8 @@
+---
+- name: Install unattended-upgrades package
+  apt:
+    name: unattended-upgrades
+    state: present
+
+# By default, the unattended-upgrades package should configure us to run
+# security updates once every day.
