@@ -1,0 +1,7 @@
+---
+- name: Remove unneeded packages
+  apt:
+    name: "{{ packages }}"
+    state: absent
+  vars:
+    packages: "{{ bastion_packages_to_remove }}"

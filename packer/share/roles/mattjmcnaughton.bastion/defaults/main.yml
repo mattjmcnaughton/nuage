@@ -1,0 +1,10 @@
+bastion_packages_to_remove:
+  - ed
+  - ftp
+  - gawk
+  - nano
+  - rsync
+  - screen
+  - tmux
+  - vim
+  - wget
