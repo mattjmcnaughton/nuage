@@ -1,9 +1,7 @@
 ---
 - hosts: all
+  become: yes
 
   tasks:
-    - name: Install packages
-      apt:
-        name: curl
-        state: present
-      become: yes
+    - include_role:
+        name: mattjmcnaughton.bastion
