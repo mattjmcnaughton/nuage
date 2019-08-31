@@ -3,20 +3,37 @@
     "type": "vagrant",
     "communicator": "ssh",
     "source_path": "../base/output-vagrant/package.box",
+    "box_name": "_tmp_",
     "provider": "virtualbox",
-    "box_name": "ubuntu/bionic64",
     "teardown_method": "destroy",
     "add_force": true,
     "skip_package": true
   }],
   "provisioners": [{
-    "type": "shell",
-    "script": "../share/scripts/install-ansible.sh"
-  }, {
     "type": "ansible",
     "playbook_file": "./playbook.yml",
     "ansible_env_vars": [
       "ANSIBLE_ROLES_PATH=../share/roles"
     ]
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/tests/linux-baseline"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/tests/ssh-baseline"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.entropy-generator/test/integration/default/"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.system-security-updates/test/integration/default/"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.bastion/test/integration/default/"
   }]
 }

@@ -4,7 +4,7 @@
     "communicator": "ssh",
     "source_path": "../share/boxes/ubuntu-1804-20190726.box",
     "provider": "virtualbox",
-    "box_name": "ubuntu/bionic64",
+    "box_name": "ubuntu-base",
     "teardown_method": "destroy",
     "add_force": true
   }, {
@@ -46,5 +46,13 @@
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],
     "profile": "../share/tests/ssh-baseline"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.entropy-generator/test/integration/default/"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.system-security-updates/test/integration/default/"
   }]
 }
