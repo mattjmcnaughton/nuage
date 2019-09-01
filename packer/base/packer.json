@@ -26,7 +26,8 @@
       "project": "nuage",
       "Name": "base-{{isotime | clean_resource_name}}",
       "name": "base-{{isotime | clean_resource_name}}",
-      "git": "TODO"
+      "fullname": "base-{{isotime | clean_resource_name}}",
+      "date": "{{isotime | clean_resource_name}}"
     }
   }],
   "provisioners": [{
