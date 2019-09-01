@@ -1,8 +1,8 @@
 lint:
-	#ansible-lint playbook.yml
+	ansible-lint playbook.yml
 	packer validate packer.json
 
-test:
+test: lint
 	packer build -only=vagrant packer.json
 
 debug:
