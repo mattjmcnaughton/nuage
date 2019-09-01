@@ -2,5 +2,10 @@ galaxy_info:
   author: mattjmcnaughton
   description: Role for ensuring we automatically run system security updates.
   license: Apache
+  min_ansible_version: '2.5'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
 
 dependencies: []

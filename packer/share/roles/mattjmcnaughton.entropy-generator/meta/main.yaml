@@ -2,5 +2,10 @@ galaxy_info:
   author: mattjmcnaughton
   description: Role for generating entropy on a system.
   license: Apache
+  min_ansible_version: '2.5'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
 
 dependencies: []
