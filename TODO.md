@@ -14,7 +14,9 @@ Brain dump of tasks to complete on this project.
 - [ ] Deploy NextCloud
 
 ## Improvements
-- [ ] Test all terraform via terratest.
-- [ ] Test all packer via terratest.
+- [ ] Test all terraform via terratest test all packer via terratest.
+  - Where do we want to store these tests? Should each module/packer
+    configuration have its own `test` directory? Or should we have one top level
+    `test` directory?
 - [ ] Manage mattjmcnaughton.com and mattjmcnaughton.io DNS entirely via this
   project.
