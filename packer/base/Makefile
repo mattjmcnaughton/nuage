@@ -10,6 +10,9 @@ debug:
 build:
 	packer build -only=amazon-ebs packer.json
 
+gotest:
+	go test -v ./base_test.go -timeout 1h
+
 clean:
 	rm -rf output-vagrant || true
 	rm ubuntu-bionic-18.04-cloudimg-console.log || true
