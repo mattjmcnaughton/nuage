@@ -1,0 +1,7 @@
+---
+ssh_disable_empty_password_login: true
+ssh_disable_password_login: true
+ssh_disable_root_login: true
+
+sshd_daemon: ssh
+sshd_config: /etc/ssh/sshd_config

@@ -1,0 +1,23 @@
+---
+driver:
+  name: vagrant
+
+platforms:
+  - name: ubuntu-18.04
+    driver_config:
+      box: ubuntu/bionic64
+
+provisioner:
+  hosts: test-kitchen
+  name: ansible_playbook
+  roles_path: ../
+  require_ansible_repo: true
+  ansible_verbose: false
+  ansible_version: latest
+  require_chef_for_busser: false
+
+verifier:
+  name: inspec
+
+suites:
+  - name: default

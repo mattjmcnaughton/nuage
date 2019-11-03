@@ -1,17 +1,17 @@
 lint:
 	packer validate packer.json
 
-test: lint
-	packer build -only=vagrant packer.json
+test:
+	go test -v ./base_test.go -timeout 1h
 
 debug:
 	packer build -debug -only=vagrant packer.json
 
+local:
+	packer build -only=vagrant packer.json
+
 build:
 	packer build -only=amazon-ebs packer.json
-
-gotest:
-	go test -v ./base_test.go -timeout 1h
 
 clean:
 	rm -rf output-vagrant || true

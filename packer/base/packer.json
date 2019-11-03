@@ -46,11 +46,11 @@
   }, {
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],
-    "profile": "../share/tests/ssh-baseline"
+    "profile": "../share/roles/mattjmcnaughton.entropy-generator/test/integration/default/"
   }, {
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],
-    "profile": "../share/roles/mattjmcnaughton.entropy-generator/test/integration/default/"
+    "profile": "../share/roles/mattjmcnaughton.ssh-hardening-lite/test/integration/default/"
   }, {
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],

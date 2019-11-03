@@ -14,18 +14,4 @@
         # We will manage network access ourselves in a separate role.
         ufw_manage_defaults: false
     - include_role:
-        name: dev-sec.ssh-hardening
-      vars:
-        # Both of the forwarding decisions are already the `ssh-hardening`
-        # default. However, we include them so we can add this meaningful
-        # comment, and explain our justification (should we want to update our
-        # decision later).
-        #
-        # For `tcp_forwarding`, the only reason I can imagine us needing to use
-        # tcp forwarding is for `kubectl`. I think we should be safe to expose
-        # the k8s API on the public internet via an ELB... we will just restrict
-        # the IPs (my dedicated vpn ip) that can access it via security groups.
-        #
-        # For `agent_forwarding`, we will use the more secure `ProxyCommand`.
-        ssh_allow_tcp_forwarding: false
-        ssh_allow_agent_forwarding: false
+        name: mattjmcnaughton.ssh-hardening-lite

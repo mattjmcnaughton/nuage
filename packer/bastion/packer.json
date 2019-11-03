@@ -11,7 +11,7 @@
   }, {
     "type": "amazon-ebs",
     "region": "us-east-1",
-    "source_ami": "ami-0cd7ba3b89f463fa8",
+    "source_ami": "ami-07720d71db22b170b",
     "instance_type": "m3.medium",
     "ssh_username": "ubuntu",
     "ami_name": "bastion-{{isotime | clean_resource_name}}",
@@ -38,15 +38,15 @@
   }, {
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],
-    "profile": "../share/tests/ssh-baseline"
-  }, {
-    "type": "inspec",
-    "extra_arguments": ["--no-distinct-exit"],
     "profile": "../share/roles/mattjmcnaughton.entropy-generator/test/integration/default/"
   }, {
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],
     "profile": "../share/roles/mattjmcnaughton.system-security-updates/test/integration/default/"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.ssh-hardening-lite/test/integration/default/"
   }, {
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],

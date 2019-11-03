@@ -1,7 +1,10 @@
 lint:
 	packer validate packer.json
 
-test: lint
+test:
+	go test -v ./bastion_test.go -timeout 1h
+
+local:
 	packer build -only=vagrant packer.json
 
 debug:

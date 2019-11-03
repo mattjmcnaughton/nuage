@@ -1,0 +1,25 @@
+---
+- name: disable empty password login
+  lineinfile:
+    dest: "{{ sshd_config }}"
+    regexp: "^#?PermitEmptyPasswords"
+    line: "PermitEmptyPasswords no"
+  when: ssh_disable_empty_password_login | bool
+  notify: restart sshd
+
+- name: disable root login
+  lineinfile:
+    dest: "{{ sshd_config }}"
+    regexp: "^#?PermitRootLogin"
+    line: "PermitRootLogin no"
+  when: ssh_disable_root_login | bool
+  notify: restart sshd
+
+
+- name: disable password login
+  lineinfile:
+    dest: "{{ sshd_config }}"
+    regexp: "^#?PasswordAuthentication "
+    line: "PasswordAuthentication no"
+  when: ssh_disable_password_login | bool
+  notify: restart sshd
