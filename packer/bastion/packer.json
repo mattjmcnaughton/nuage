@@ -11,7 +11,15 @@
   }, {
     "type": "amazon-ebs",
     "region": "us-east-1",
-    "source_ami": "ami-07720d71db22b170b",
+    "source_ami_filter": {
+      "filters": {
+        "name": "base-*",
+        "virtualization-type": "hvm",
+        "root-device-type": "ebs"
+      },
+      "owners": ["073182613561"],
+      "most_recent": true
+    },
     "instance_type": "m3.medium",
     "ssh_username": "ubuntu",
     "ami_name": "bastion-{{isotime | clean_resource_name}}",
@@ -19,9 +27,9 @@
       "project": "nuage",
       "Name": "bastion-{{isotime | clean_resource_name}}",
       "name": "bastion-{{isotime | clean_resource_name}}",
-      "fullname": "bastion{{isotime | clean_resource_name}}",
-      "base_image_ami": "ami-0cd7ba3b89f463fa8",
-      "base_image_name": "base-2019-09-01T14-41-47Z",
+      "fullname": "bastion-{{isotime | clean_resource_name}}",
+      "base_image_ami": "{{ .SourceAMI }}",
+      "base_image_name": "{{ .SourceAMIName }}",
       "date": "{{isotime | clean_resource_name}}"
     }
   }],
