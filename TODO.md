@@ -16,8 +16,6 @@ Brain dump of tasks to complete on this project.
 - [ ] Test all terraform via terratest and test all packer via terratest.
 - Dynamically select AMI based on latest with the proper tags.
   - Don't hard code AMI.
-- [ ] Manage mattjmcnaughton.com and mattjmcnaughton.io DNS entirely via this
-  project.
 
 ## Misc clean up
 - [ ] Remove all mentions of `ansible-lint`
