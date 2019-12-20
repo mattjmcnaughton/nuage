@@ -25,16 +25,16 @@ resource "aws_route53_zone" "dev_mattjmcnaughton_io" {
 }
 
 resource "aws_route53_record" "dev_mattjmcnaughton_io_ns" {
-  zone_id = "${aws_route53_zone.mattjmcnaughton_io.zone_id}"
+  zone_id = aws_route53_zone.mattjmcnaughton_io.zone_id
   name = "dev.mattjmcnaughton.io"
   type = "NS"
   ttl = "30"
 
   records = [
-    "${aws_route53_zone.dev_mattjmcnaughton_io.name_servers.0}",
-    "${aws_route53_zone.dev_mattjmcnaughton_io.name_servers.1}",
-    "${aws_route53_zone.dev_mattjmcnaughton_io.name_servers.2}",
-    "${aws_route53_zone.dev_mattjmcnaughton_io.name_servers.3}",
+    aws_route53_zone.dev_mattjmcnaughton_io.name_servers.0,
+    aws_route53_zone.dev_mattjmcnaughton_io.name_servers.1,
+    aws_route53_zone.dev_mattjmcnaughton_io.name_servers.2,
+    aws_route53_zone.dev_mattjmcnaughton_io.name_servers.3,
   ]
 }
 
@@ -43,16 +43,16 @@ resource "aws_route53_zone" "staging_mattjmcnaughton_io" {
 }
 
 resource "aws_route53_record" "staging_mattjmcnaughton_io_ns" {
-  zone_id = "${aws_route53_zone.mattjmcnaughton_io.zone_id}"
+  zone_id = aws_route53_zone.mattjmcnaughton_io.zone_id
   name = "staging.mattjmcnaughton.io"
   type = "NS"
   ttl = "30"
 
   records = [
-    "${aws_route53_zone.staging_mattjmcnaughton_io.name_servers.0}",
-    "${aws_route53_zone.staging_mattjmcnaughton_io.name_servers.1}",
-    "${aws_route53_zone.staging_mattjmcnaughton_io.name_servers.2}",
-    "${aws_route53_zone.staging_mattjmcnaughton_io.name_servers.3}",
+    aws_route53_zone.staging_mattjmcnaughton_io.name_servers.0,
+    aws_route53_zone.staging_mattjmcnaughton_io.name_servers.1,
+    aws_route53_zone.staging_mattjmcnaughton_io.name_servers.2,
+    aws_route53_zone.staging_mattjmcnaughton_io.name_servers.3,
   ]
 }
 
@@ -61,16 +61,16 @@ resource "aws_route53_zone" "prod_mattjmcnaughton_io" {
 }
 
 resource "aws_route53_record" "prod_mattjmcnaughton_io_ns" {
-  zone_id = "${aws_route53_zone.mattjmcnaughton_io.zone_id}"
+  zone_id = aws_route53_zone.mattjmcnaughton_io.zone_id
   name = "prod.mattjmcnaughton.io"
   type = "NS"
   ttl = "30"
 
   records = [
-    "${aws_route53_zone.prod_mattjmcnaughton_io.name_servers.0}",
-    "${aws_route53_zone.prod_mattjmcnaughton_io.name_servers.1}",
-    "${aws_route53_zone.prod_mattjmcnaughton_io.name_servers.2}",
-    "${aws_route53_zone.prod_mattjmcnaughton_io.name_servers.3}",
+    aws_route53_zone.prod_mattjmcnaughton_io.name_servers.0,
+    aws_route53_zone.prod_mattjmcnaughton_io.name_servers.1,
+    aws_route53_zone.prod_mattjmcnaughton_io.name_servers.2,
+    aws_route53_zone.prod_mattjmcnaughton_io.name_servers.3,
   ]
 }
 
@@ -79,15 +79,15 @@ resource "aws_route53_zone" "global_mattjmcnaughton_io" {
 }
 
 resource "aws_route53_record" "global_mattjmcnaughton_io_ns" {
-  zone_id = "${aws_route53_zone.mattjmcnaughton_io.zone_id}"
+  zone_id = aws_route53_zone.mattjmcnaughton_io.zone_id
   name = "global.mattjmcnaughton.io"
   type = "NS"
   ttl = "30"
 
   records = [
-    "${aws_route53_zone.global_mattjmcnaughton_io.name_servers.0}",
-    "${aws_route53_zone.global_mattjmcnaughton_io.name_servers.1}",
-    "${aws_route53_zone.global_mattjmcnaughton_io.name_servers.2}",
-    "${aws_route53_zone.global_mattjmcnaughton_io.name_servers.3}",
+    aws_route53_zone.global_mattjmcnaughton_io.name_servers.0,
+    aws_route53_zone.global_mattjmcnaughton_io.name_servers.1,
+    aws_route53_zone.global_mattjmcnaughton_io.name_servers.2,
+    aws_route53_zone.global_mattjmcnaughton_io.name_servers.3,
   ]
 }
