@@ -45,7 +45,9 @@ certbot certonly \
 5. Upload the certs to s3 (can use `docker cp` to copy off the container if we
    forgot to mount a volume).
   - Store in `s3://g-mattjmcnaughton/ssl/DOMAIN/...`
-  - NOTE: Should we be storing these certs as encrypted on s3?
+  - NOTE: When using `aws s3 cp` ensure we specify `--sse AES256` flag.
+    - Eventually, we should set up a policy that everything we write to our s3
+      buckets must be encrypted.
 6. Shred the ssl certs on the host and kill the container we used to generate
    them.
 7. Run `terraform destroy` in the orchestration directory.
