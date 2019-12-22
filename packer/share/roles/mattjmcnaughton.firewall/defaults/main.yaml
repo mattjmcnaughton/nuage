@@ -1,0 +1,3 @@
+---
+ufw_incoming_ports_to_allow: []
+ufw_incoming_ports_to_deny: []

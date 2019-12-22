@@ -1,0 +1,3 @@
+---
+- name: Run platform specific firewall commands
+  include_tasks: "firewall-{{ ansible_os_family }}.yaml"

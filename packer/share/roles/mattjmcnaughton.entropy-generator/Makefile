@@ -1,5 +1,5 @@
 .PHONY: test
 
 test:
-	ansible-lint ./
+	ansible-lint
 	bundle exec kitchen test

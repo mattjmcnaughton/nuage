@@ -1,0 +1,10 @@
+galaxy_info:
+  author: mattjmcnaughton
+  description: Role for setting up firewalls.
+  license: Apache
+  min_ansible_version: 2.5
+  platforms:
+    - name: Ubuntu
+    - name: Debian
+
+dependencies: []

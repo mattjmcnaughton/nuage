@@ -3,5 +3,14 @@
   become: yes
 
   tasks:
+    # It is the responsibility of every application image to include the
+    # `mattjmcnaughton.system-security-updates` role.
+    - include_role:
+        name: mattjmcnaughton.system-security-updates
     - include_role:
         name: mattjmcnaughton.bastion
+    - include_role:
+        name: mattjmcnaughton.firewall
+      vars:
+        ufw_incoming_ports_to_allow:
+          - "22"

@@ -1,4 +1,5 @@
 lint:
+	ansible-lint
 	packer validate packer.json
 
 test:

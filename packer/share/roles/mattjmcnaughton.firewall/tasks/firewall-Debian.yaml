@@ -1,0 +1,54 @@
+---
+- name: Perform ufw actions as root
+  block:
+    - name: Install ufw
+      apt:
+        name: ufw
+        state: present
+
+    - name: Temporarily turn off ufw while updating settings
+      ufw:
+        state: disabled
+
+    - name: Turn on ufw logging
+      ufw:
+        logging: 'on'
+
+    - name: Deny all inbound traffic by default
+      ufw:
+        policy: deny
+        direction: incoming
+
+    - name: Allow all outbound traffic by default
+      ufw:
+        policy: allow
+        direction: outgoing
+
+    - name: Allow incoming traffic on specified ports
+      ufw:
+        policy: allow
+        port: "{{ item }}"
+      loop: "{{ ufw_incoming_ports_to_allow }}"
+
+    - name: Deny incoming traffic on specified ports
+      ufw:
+        policy: deny
+        port: "{{ item }}"
+      loop: "{{ ufw_incoming_ports_to_deny }}"
+
+    - name: Turn on ufw
+      ufw:
+        state: enabled
+
+    - name: Update sysctl martian settings to prevent DOS
+      sysctl:
+        name: "{{ item }}"
+        value: "1"
+        sysctl_set: yes
+        state: present
+        reload: yes
+        ignoreerrors: yes
+      loop:
+        - "net.ipv4.conf.all.log_martians"
+        - "net.ipv4.conf.default.log_martians"
+  become: yes

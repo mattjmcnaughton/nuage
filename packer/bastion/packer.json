@@ -59,5 +59,9 @@
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],
     "profile": "../share/roles/mattjmcnaughton.bastion/test/integration/default/"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.firewall/test/integration/default/"
   }]
 }
