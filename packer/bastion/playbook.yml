@@ -21,7 +21,7 @@
         ufw_incoming_ports_to_allow:
           - "22"
     # It is the responsibility of every application image to include the
-    # `mattjmcnaughton.system-security-updates` role. Place as the last step, so
+    # `mattjmcnaughton.system-security-upgrades` role. Place as the last step, so
     # if it immediately runs apt tasks, it can't disrupt anything.
     - include_role:
-        name: mattjmcnaughton.system-security-updates
+        name: mattjmcnaughton.system-security-upgrades

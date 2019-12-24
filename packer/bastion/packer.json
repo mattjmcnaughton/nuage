@@ -52,7 +52,7 @@
   }, {
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],
-    "profile": "../share/roles/mattjmcnaughton.system-security-updates/test/integration/default/"
+    "profile": "../share/roles/mattjmcnaughton.system-security-upgrades/test/integration/default/"
   }, {
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],

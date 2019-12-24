@@ -18,4 +18,10 @@ if os.family == 'debian'
   describe kernel_parameter('net.ipv4.conf.default.log_martians') do
     its(:value) { should eq 1 }
   end
+
+  describe command('sudo ufw status verbose') do
+    its('stdout') { should match (/Status: active/)}
+    its('stdout') { should match (/22.*ALLOW/)}
+    its('stdout') { should match (/Default: deny \(incoming\), allow \(outgoing\)/)}
+  end
 end
