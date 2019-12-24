@@ -3,10 +3,16 @@
   become: yes
 
   tasks:
-    # It is the responsibility of every application image to include the
-    # `mattjmcnaughton.system-security-updates` role.
     - include_role:
-        name: mattjmcnaughton.system-security-updates
+        name: mattjmcnaughton.entropy-generator
+    - include_role:
+        name: dev-sec.os-hardening
+      vars:
+        oss_auth_pw_max_age: 99999
+        # We will manage network access ourselves in a separate role.
+        ufw_manage_defaults: false
+    - include_role:
+        name: mattjmcnaughton.ssh-hardening-lite
     - include_role:
         name: mattjmcnaughton.bastion
     - include_role:
@@ -14,3 +20,8 @@
       vars:
         ufw_incoming_ports_to_allow:
           - "22"
+    # It is the responsibility of every application image to include the
+    # `mattjmcnaughton.system-security-updates` role. Place as the last step, so
+    # if it immediately runs apt tasks, it can't disrupt anything.
+    - include_role:
+        name: mattjmcnaughton.system-security-updates

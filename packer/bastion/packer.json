@@ -2,22 +2,21 @@
   "builders": [{
     "type": "vagrant",
     "communicator": "ssh",
-    "source_path": "../base/output-vagrant/package.box",
-    "box_name": "_tmp_",
+    "source_path": "../share/boxes/ubuntu-1804-20190726.box",
     "provider": "virtualbox",
+    "box_name": "ubuntu-base",
     "teardown_method": "destroy",
-    "add_force": true,
-    "skip_package": true
+    "add_force": true
   }, {
     "type": "amazon-ebs",
     "region": "us-east-1",
     "source_ami_filter": {
       "filters": {
-        "name": "base-*",
         "virtualization-type": "hvm",
+        "name": "ubuntu/images/*ubuntu-bionic-18.04-amd64-server-*",
         "root-device-type": "ebs"
       },
-      "owners": ["073182613561"],
+      "owners": ["099720109477"],
       "most_recent": true
     },
     "instance_type": "m3.medium",
@@ -34,6 +33,9 @@
     }
   }],
   "provisioners": [{
+    "type": "shell",
+    "script": "../share/scripts/install-ansible.sh"
+  }, {
     "type": "ansible",
     "playbook_file": "./playbook.yml",
     "ansible_env_vars": [

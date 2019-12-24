@@ -6,40 +6,40 @@
         name: ufw
         state: present
 
-    - name: Temporarily turn off ufw while updating settings
+    - name: Turn on ufw
       ufw:
-        state: disabled
+        state: enabled
 
     - name: Turn on ufw logging
       ufw:
         logging: 'on'
 
+    # Denying inbound traffic won't impact already accepted connections (i.e. we
+    # don't need to worry about this negatively impacting the ssh connection
+    # we're already connected).
     - name: Deny all inbound traffic by default
       ufw:
-        policy: deny
+        default: deny
         direction: incoming
 
     - name: Allow all outbound traffic by default
       ufw:
-        policy: allow
+        default: allow
         direction: outgoing
 
     - name: Allow incoming traffic on specified ports
       ufw:
-        policy: allow
+        rule: allow
         port: "{{ item }}"
       loop: "{{ ufw_incoming_ports_to_allow }}"
 
     - name: Deny incoming traffic on specified ports
       ufw:
-        policy: deny
+        rule: deny
         port: "{{ item }}"
       loop: "{{ ufw_incoming_ports_to_deny }}"
 
-    - name: Turn on ufw
-      ufw:
-        state: enabled
-
+    # TODO: I'm not confident these settings are persisting across reboots...
     - name: Update sysctl martian settings to prevent DOS
       sysctl:
         name: "{{ item }}"
