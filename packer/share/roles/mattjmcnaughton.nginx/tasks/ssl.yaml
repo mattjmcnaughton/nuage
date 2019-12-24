@@ -1,0 +1,48 @@
+---
+- name: Execute SSL provisioning as root
+  block:
+    - name: Generate OpenSSL private key
+      openssl_privatekey:
+        path: "{{ nginx_ssl_selfsigned_privatekey_path }}"
+        owner: root
+
+    - name: Generate OpenSSL CSR
+      openssl_csr:
+        path: "{{ nginx_ssl_selfsigned_csr_path }}"
+        privatekey_path: "{{ nginx_ssl_selfsigned_privatekey_path }}"
+        common_name: "{{ nginx_common_name }}"
+        owner: root
+
+    - name: Generate a self-signed OpenSSL certificate
+      openssl_certificate:
+        path: "{{ nginx_ssl_selfsigned_cert_path }}"
+        csr_path: "{{ nginx_ssl_selfsigned_csr_path }}"
+        privatekey_path: "{{ nginx_ssl_selfsigned_privatekey_path }}"
+        provider: selfsigned
+        owner: root
+        mode: 0600
+      notify: reload nginx
+
+    - name: Generate Diffie-Hellman parameters
+      openssl_dhparam:
+        path: "{{ nginx_dhparams_path }}"
+        size: "{{ nginx_dhparams_size }}"
+        owner: root
+      notify: reload nginx
+
+    # Using a symlink to the selfsigned cert allows us to change the symlink to
+    # point to our Lets Encrypt certs... and as a result not need to change our
+    # nginx conf.
+    - name: Create symlink from const link to selfsigned cert
+      file:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        state: link
+        owner: root
+      loop:
+        - { src: "{{ nginx_ssl_selfsigned_privatekey_path }}", dest: "{{ nginx_ssl_privatekey_path }}" }
+        - { src: "{{ nginx_ssl_selfsigned_cert_path }}", dest: "{{ nginx_ssl_cert_path }}" }
+        # We don't need to link the csr file as its only necessary for generating
+        # the private key and cert. We don't need to link the dhparams.pem, as it
+        # can be shared by both the selfsigned and Let's Encrypt certs.
+  become: yes

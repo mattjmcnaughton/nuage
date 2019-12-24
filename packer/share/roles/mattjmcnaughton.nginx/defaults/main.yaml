@@ -1,0 +1,35 @@
+---
+nginx_ssl_root: /etc/ssl
+nginx_ssl_cert_root: "{{ nginx_ssl_root }}/certs"
+nginx_common_name: mattjmcnaughton.com
+
+nginx_ssl_selfsigned_privatekey_path: "{{ nginx_ssl_root }}/private/selfsigned.{{ nginx_common_name }}.key"
+nginx_ssl_selfsigned_csr_path: "{{ nginx_ssl_root }}/private/selfsigned.{{ nginx_common_name }}.csr"
+nginx_ssl_selfsigned_cert_path: "{{ nginx_ssl_cert_root }}/selfsigned.{{ nginx_common_name }}.crt"
+
+nginx_ssl_privatekey_path: "{{ nginx_ssl_root }}/private/{{ nginx_common_name }}.key"
+nginx_ssl_csr_path: "{{ nginx_ssl_root }}/private/{{ nginx_common_name }}.csr"
+nginx_ssl_cert_path: "{{ nginx_ssl_cert_root }}/{{ nginx_common_name }}.crt"
+
+nginx_dhparams_path: "{{ nginx_ssl_cert_root }}/dhparams.pem"
+nginx_dhparams_size: 4096
+
+nginx_snippets_root: /etc/nginx/snippets
+nginx_snippets_ssl_certs_path: "{{ nginx_snippets_root }}/ssl-certs.conf"
+nginx_snippets_ssl_params_path: "{{ nginx_snippets_root }}/ssl-params.conf"
+
+nginx_conf_user: www-data
+nginx_conf_pid: /run/nginx.pid
+nginx_conf_worker_connections: 768
+nginx_conf_keepalive_timeout: 65
+nginx_conf_log_dir: /var/log/nginx
+
+# A known short-coming is that we only allow specifying one vhost. This
+# restriction is strictly for the mvp. Eventually, we should be able to specify
+# multiple vhosts.
+nginx_vhost_redirect_http_to_https: true
+nginx_vhost_auth_basic: true
+nginx_vhost_auth_basic_realm: "Default"
+nginx_vhost_auth_basic_user_file: /etc/nginx/.htpasswd
+nginx_vhost_extra_misc_config: ""
+nginx_vhost_extra_location: ""

@@ -1,0 +1,30 @@
+---
+- name: Provision base nginx (non-vhost) as root
+  block:
+    - name: Provision `nginx.conf`
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+      notify: reload nginx
+
+    - name: Create ssl config snippet
+      template:
+        src: ssl-params.conf.j2
+        dest: "{{ nginx_snippets_ssl_params_path }}"
+        owner: root
+        group: root
+        mode: '0644'
+      notify: reload nginx
+
+    - name: Create ssl certs snippet
+      template:
+        src: ssl-certs.conf.j2
+        dest: "{{ nginx_snippets_ssl_certs_path }}"
+        owner: root
+        group: root
+        mode: '0644'
+      notify: reload nginx
+  become: yes

@@ -1,0 +1,30 @@
+user {{ nginx_conf_user }};
+worker_processes auto;
+pid {{ nginx_conf_pid }};
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+	worker_connections {{ nginx_conf_worker_connections }};
+}
+
+http {
+	sendfile on;
+	tcp_nopush on;
+	tcp_nodelay on;
+	keepalive_timeout {{ nginx_conf_keepalive_timeout }};
+	types_hash_max_size 2048;
+
+	include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+
+	ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # Dropping SSLv3, ref: POODLE
+	ssl_prefer_server_ciphers on;
+
+	access_log {{ nginx_conf_log_dir }}/access.log;
+	error_log {{ nginx_conf_log_dir }}/error.log;
+
+	gzip on;
+
+	include /etc/nginx/conf.d/*.conf;
+	include /etc/nginx/sites-enabled/*;
+}

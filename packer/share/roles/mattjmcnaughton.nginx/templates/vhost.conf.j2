@@ -1,0 +1,31 @@
+{% if nginx_vhost_redirect_http_to_https %}
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	server_name _;
+	return 301 https://localhost$request_uri;
+}
+{% endif %}
+
+server {
+	listen 443 ssl http2 default_server;
+	listen [::]:443 ssl http2 default_server;
+
+  include {{ nginx_snippets_ssl_certs_path }};
+  include {{ nginx_snippets_ssl_params_path }};
+
+	server_name _;
+
+	# Note: You should disable gzip for SSL traffic.
+	# See: https://bugs.debian.org/773332
+	gzip off;
+
+  {% if nginx_vhost_auth_basic %}
+  auth_basic {{ nginx_vhost_auth_basic_realm }};
+  auth_basic_user_file {{ nginx_vhost_auth_basic_user_file }};
+  {% endif %}
+
+  {{ nginx_vhost_extra_misc_config }}
+
+  {{ nginx_vhost_location_config }}
+}

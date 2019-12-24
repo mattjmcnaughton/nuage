@@ -1,0 +1,15 @@
+---
+- name: Run platform specific install commands
+  include_tasks: "install-{{ ansible_os_family }}.yaml"
+
+- name: Provision selfsigned ssl certs and dh params
+  include_tasks: "ssl.yaml"
+
+- name: Provision base nginx configuration
+  include_tasks: "base.yaml"
+
+- name: Provision vhost nginx configuration
+  include_tasks: "vhost.yaml"
+
+- name: Manage nginx service
+  include_tasks: "service.yaml"

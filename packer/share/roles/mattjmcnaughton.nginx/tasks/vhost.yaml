@@ -1,0 +1,34 @@
+---
+- name: Execute vhost tasks as root
+  block:
+    - name: Execute htpasswd tasks
+      block:
+        # Insecure - we intend the `/etc/nginx/.htpasswd` to be overwritten
+        # before we actually serve production traffic. But we don't want to bake
+        # secrets into AMIs.
+        - name: Add user to insecure htpasswd file
+          htpasswd:
+            path: /etc/nginx/.htpasswd-insecure
+            name: matt
+            password: insecure
+            owner: "{{ nginx_conf_user }}"
+            mode: 0600
+          notify: reload nginx
+        - name: Establish constant location for htpasswd
+          file:
+            src: /etc/nginx/.htpasswd-insecure
+            dest: "{{ nginx_vhost_auth_basic_user_file }}"
+            state: link
+            owner: "{{ nginx_conf_user }}"
+          notify: reload nginx
+      when: nginx_vhost_auth_basic == true
+
+    - name: Provision `default.conf`
+      template:
+        src: vhost.conf.j2
+        dest: /etc/nginx/sites-available/default
+        owner: root
+        group: root
+        mode: '0644'
+      notify: reload nginx
+  become: yes

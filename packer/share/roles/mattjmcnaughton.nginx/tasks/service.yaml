@@ -1,0 +1,9 @@
+---
+- name: Run service management tasks as root
+  block:
+    - name: Ensure nginx service enabled and started
+      service:
+        name: nginx
+        enabled: yes
+        state: started
+  become: yes

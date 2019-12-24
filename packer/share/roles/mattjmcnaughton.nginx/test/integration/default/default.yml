@@ -1,0 +1,20 @@
+- hosts: all
+
+  vars:
+    srv_directory: /var/www/test
+
+  tasks:
+    # I believe generating the dhparams needs some entropy, so ensure we are
+    # generating it.
+    - include_role:
+        name: mattjmcnaughton.entropy-generator
+      vars:
+        entropy_generator_sleep_to_allow_entropy_generation: 5
+    - include_role:
+        name: mattjmcnaughton.nginx
+      vars:
+        # Otherwise generating the dhparams takes forever.
+        nginx_dhparams_size: 1024
+        nginx_vhost_location_config: |
+          location / {
+          }

@@ -1,0 +1,7 @@
+---
+# Do we ever need to restart nginx? Or is just reloading sufficient?
+- name: reload nginx
+  service:
+    name: nginx
+    state: reloaded
+  become: yes

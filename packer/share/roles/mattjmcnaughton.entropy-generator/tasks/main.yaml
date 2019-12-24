@@ -13,4 +13,4 @@
 
 - name: Sleep to allow entropy generation
   wait_for:
-    timeout: 30
+    timeout: "{{ entropy_generator_sleep_to_allow_entropy_generation }}"
