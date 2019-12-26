@@ -1,0 +1,11 @@
+galaxy_info:
+  author: mattjmcnaughton
+  description: Role for provisioning host serving my blog.
+  license: Apache
+  min_ansible_version: 2.5
+  platforms:
+    - name: Ubuntu
+    - name: Debian
+
+# Depends on `mattjmcnaughton.nginx` role... but we want to control how it is
+# executed so we don't specify via a `dependency` block.

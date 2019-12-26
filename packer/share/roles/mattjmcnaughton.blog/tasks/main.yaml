@@ -1,0 +1,84 @@
+---
+- name: Execute tasks as root in temporary working dir
+  block:
+    # Adding the initial step of installing nginx hardcodes the assumption that
+    # we're using Linux/Ubuntu... should we want to derivate from this
+    # assumption, it should be fairly easy to extract. We want to install nginx
+    # so the `www-data` user and the `/var/www` directories exist.
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Create temporary working dir
+      file:
+        path: "{{ blog_tmp_work_dir }}"
+        state: directory
+
+    - name: Clone blog git repo onto machine
+      git:
+        repo: "{{ blog_git_remote_url }}"
+        dest: "{{ blog_dir }}"
+        depth: 1  # We only need the most recent snapshot...
+        version: "{{ blog_git_version }}"
+
+    - name: Download hugo release as tar
+      get_url:
+        url: "{{ blog_hugo_linux_tar_url }}"
+        dest: "{{ blog_tmp_work_dir }}/hugo.tar.gz"
+        checksum: "sha256:{{ blog_hugo_linux_tar_checksum }}"
+
+    - name: Create directory for hugo bin
+      file:
+        path: "{{ blog_tmp_work_dir }}/bin"
+        state: directory
+
+    - name: Extract hugo binary
+      unarchive:
+        src: "{{ blog_tmp_work_dir }}/hugo.tar.gz"
+        dest: "{{ blog_tmp_work_dir }}/bin/"
+
+    - name: Execute the hugo build step in the Git repo
+      command: "{{ blog_tmp_work_dir }}/bin/hugo"
+      args:
+        chdir: "{{ blog_dir }}"
+
+    - name: Ensure blog dir exists
+      file:
+        path: "{{ blog_srv_dir }}"
+        state: directory
+
+    - name: Copy the public assets into srv location
+      copy:
+        src: "{{ blog_dir }}/public"
+        dest: "{{ blog_srv_dir }}/"
+        remote_src: yes
+        owner: "{{ blog_srv_owner }}"
+        group: "{{ blog_srv_owner }}"
+        mode: "0644"
+
+    - name: Update directory permissions for srv dir
+      file:
+        path: "{{ blog_srv_dir }}/public"
+        state: directory
+        mode: "0755"
+
+    - name: Install nginx via our nginx role
+      include_role:
+        name: mattjmcnaughton.nginx
+      vars:
+        nginx_vhost_auth_basic: false
+        nginx_vhost_extra_misc_config: |
+          root {{ blog_srv_dir }}/public;
+          index index.html;
+        nginx_vhost_location_config: |
+          location / {
+            try_files $uri $uri/ =404;
+          }
+
+  always:
+    - name: Clean up temporary working dir
+      file:
+        path: "{{ blog_tmp_work_dir }}"
+        state: absent
+  become: yes

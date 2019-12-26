@@ -1,0 +1,13 @@
+---
+blog_tmp_work_dir: /tmp/tmp-work-dir
+
+blog_git_remote_url: https://github.com/mattjmcnaughton/blog.git
+blog_dir: "{{ blog_tmp_work_dir }}/blog"
+blog_git_version: master
+
+blog_srv_dir: /var/www/blog
+blog_srv_owner: www-data
+
+blog_hugo_version: 0.62.0
+blog_hugo_linux_tar_url: https://github.com/gohugoio/hugo/releases/download/v{{ blog_hugo_version }}/hugo_{{ blog_hugo_version }}_Linux-64bit.tar.gz
+blog_hugo_linux_tar_checksum: 1c3f999320ae30f9b648f6f72305b126be7fd4bab9cb7edf74253c0cbe892c87
