@@ -21,7 +21,7 @@
             state: link
             owner: "{{ nginx_conf_user }}"
           notify: reload nginx
-      when: nginx_vhost_auth_basic == true
+      when: nginx_vhost_auth_basic
 
     - name: Provision `default.conf`
       template:
