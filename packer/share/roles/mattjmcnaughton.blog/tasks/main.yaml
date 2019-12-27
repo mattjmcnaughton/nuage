@@ -37,6 +37,7 @@
       unarchive:
         src: "{{ blog_tmp_work_dir }}/hugo.tar.gz"
         dest: "{{ blog_tmp_work_dir }}/bin/"
+        remote_src: yes
 
     - name: Execute the hugo build step in the Git repo
       command: "{{ blog_tmp_work_dir }}/bin/hugo"
