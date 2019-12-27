@@ -1,0 +1,12 @@
+#cloud-config
+system_info:
+  default_user:
+    name: mattjmcnaughton
+
+# add commands to install the proper ssl certs
+- Install s3 via apt
+- Pull down certs - privkey and fullchain
+- Chmod 0600
+- Update symlinks
+- Reload nginx
+- Uninstall s3 via apt and run autoremove
