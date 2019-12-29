@@ -34,3 +34,9 @@ variable "aws_key_pair_key_name" {
   default = "mattjmcnaughton_personal_rsa"
   type = string
 }
+
+variable "additional_alias_records_for_elb" {
+  description = "Additional alias records for which we want to redirect the elb."
+  type = list(string)
+  default = []
+}

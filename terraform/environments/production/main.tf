@@ -49,4 +49,10 @@ module "blog" {
   extra_host_security_groups = [
     module.bastion.allow_ssh_ingress_from_bastion_id
   ]
+
+  additional_alias_records_for_elb = [
+    "mattjmcnaughton.com",
+    "blog.mattjmcnaughton.com",
+    "www.mattjmcnaughton.com",
+  ]
 }
