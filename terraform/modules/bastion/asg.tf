@@ -58,4 +58,6 @@ module "bastion_asg" {
     Terraform = "true"
     project = "nuage"
   }
+
+  recreate_asg_when_lc_changes = true
 }
