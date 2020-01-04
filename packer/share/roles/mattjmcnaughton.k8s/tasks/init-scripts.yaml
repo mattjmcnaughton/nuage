@@ -1,0 +1,14 @@
+---
+- name: Copy scripts for running `kubeadm init|join` with the proper settings
+  template:
+    src: "{{ item.src }}"
+    dest: "/usr/local/bin/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: '0700'
+  loop:
+    - src: kubeadm-init.sh.j2
+      dest: kubeadm-init.sh
+    - src: kubeadm-join.sh.j2
+      dest: kubeadm-join.sh
+  become: yes

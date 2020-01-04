@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Perform some check for if kubernetes is already running.
+
+kubeadm init \
+  --token=${KUBEADM_TOKEN} \
+  --certificate-key=${KUBEADM_CERTIFICATE_KEY} \
+  --pod-network-cidr="{{ flannel_pod_network_cidr }}" \
+  --skip-token-print \
+  --skip-certificate-key-print \
+  --dry-run
+
+# Upload the `/etc/kubernetes/admin.conf` file.

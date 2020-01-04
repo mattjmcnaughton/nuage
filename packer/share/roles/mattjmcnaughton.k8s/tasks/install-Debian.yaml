@@ -1,0 +1,74 @@
+---
+- name: Perform install actions as root
+  block:
+    - name: Update apt cache if necessary
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600  # in seconds
+
+    - name: Install packages necessary for managing apt repos
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    # Docker... will eventually become its own role.
+    - name: Add docker apt repo key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+      register: docker_apt_key
+
+    - name: Add the docker apt repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+      register: docker_apt_repository
+
+    - name: Run apt update when necessary
+      apt:
+        update_cache: yes
+      when: docker_apt_key.changed or docker_apt_repository.changed
+
+    - name: Install docker-ce
+      apt:
+        pkg:
+          - docker-ce
+        state: present
+
+    # k8s...
+    - name: Add k8s apt repo key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      register: k8s_apt_key
+
+    - name: Add the k8s apt repository
+      apt_repository:
+        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+      register: k8s_apt_repository
+
+    - name: Run apt update when necessary
+      apt:
+        update_cache: yes
+      when: k8s_apt_key.changed or k8s_apt_repository.changed
+
+    - name: Install kubelet, kubeadm, and kubectl
+      apt:
+        pkg:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+
+    - name: Prevent kubelet, kubeadm, and kubectl from being updated
+      dpkg_selections:
+        name: "{{ item }}"
+        selection: hold
+      loop:
+        - kubelet
+        - kubeadm
+        - kubectl
+  become: yes

@@ -1,0 +1,5 @@
+- hosts: all
+
+  tasks:
+    - include_role:
+        name: mattjmcnaughton.k8s

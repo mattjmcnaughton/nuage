@@ -1,0 +1,29 @@
+---
+driver:
+  # Use vagrant because we are relying upon a systemd service starting. Use
+  # docker when we do not have any need for systemd.
+  name: vagrant
+
+platforms:
+  # Will run tests for each platform
+  - name: ubuntu-18.04
+    driver_config:
+      box: ubuntu/bionic64
+
+# Will automatically execute the playbook in
+# `test/integration/${suite}/${suite}.yml`
+provisioner:
+  hosts: test-kitchen
+  name: ansible_playbook
+  roles_path: ../
+  require_ansible_repo: true
+  ansible_verbose: false
+  ansible_version: latest
+  require_chef_for_busser: false
+
+# Will automatically run tests in `test/integration/${suite}`
+verifier:
+  name: inspec
+
+suites:
+  - name: default

@@ -1,0 +1,12 @@
+---
+- name: Run platform specific install commands
+  include_tasks: "install-{{ ansible_os_family }}.yaml"
+
+- name: Update sysctl
+  include_tasks: "sysctl.yaml"
+
+- name: Perform validation
+  include_tasks: "validate.yaml"
+
+- name: Template init scripts
+  include_tasks: "init-scripts.yaml"

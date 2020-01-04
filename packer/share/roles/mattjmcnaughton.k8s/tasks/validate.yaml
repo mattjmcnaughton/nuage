@@ -1,0 +1,6 @@
+---
+- name: Perform validate actions as root
+  block:
+    - name: Validate via pre-pulling the needed images
+      command: kubeadm config images pull
+  become: yes

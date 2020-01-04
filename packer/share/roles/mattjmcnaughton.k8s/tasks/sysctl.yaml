@@ -1,0 +1,9 @@
+- name: Perform sysctl actions as root
+  block:
+    - name: Ensure passing bridged IpV4 traffic to iptables' chains for flannel CNI
+      sysctl:
+        name: net.bridge.bridge-nf-call-iptables
+        value: '1'
+        state: present
+  become: yes
+

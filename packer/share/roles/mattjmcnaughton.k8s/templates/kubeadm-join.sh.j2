@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Must have download discovery file (which we upload to s3 after we launch the
+# master).
+#
+# Not entirely sure how we will handle the master failing/needing to be
+# restarted... I presume we will need to delete all of our workers?
+#
+# Definitely need to think about the back up strategy.
+
+kubeadm join \
+  --discovery-file ${KUBEADM_DISCOVERY_FILE} \
+  --dry-run
