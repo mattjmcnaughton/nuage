@@ -4,3 +4,5 @@ ubuntu-bionic-18.04-cloudimg-console.log
 .kitchen
 Gemfile.lock
 inspec.lock
+.vagrant
+crash.log

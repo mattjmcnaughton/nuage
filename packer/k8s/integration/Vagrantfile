@@ -1,0 +1,46 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "../output-vagrant/package.box"
+
+  # Assume tne `/vagrant` is bound.
+
+  $master_script = <<-M_SCRIPT
+  sudo kubeadm init --pod-network-cidr="10.244.0.0/16" --apiserver-advertise-address 192.168.3.2 --upload-certs
+  sudo cp /etc/kubernetes/admin.conf /vagrant/
+  M_SCRIPT
+
+  $worker_script = <<-W_SCRIPT
+  sudo kubeadm join --discovery-file /vagrant/admin.conf -v 5
+  W_SCRIPT
+
+  $tester_script = <<-T_SCRIPT
+  mkdir -p ~/.kube
+  cp /vagrant/admin.conf ~/.kube/config
+  sudo chown $(id -u):$(id -g) ~/.kube/config
+
+  kubectl --insecure-skip-tls-verify get nodes
+  kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
+  sleep 10
+  kubectl get nodes
+  kubectl apply -f https://k8s.io/examples/application/deployment.yaml
+  kubectl get deployment
+  T_SCRIPT
+
+
+  boxes = [
+    { name: "master", ip: "192.168.3.2", script: $master_script },
+    { name: "worker", ip: "192.168.3.3", script: $worker_script },
+    { name: "tester", ip: "192.168.3.4", script: $tester_script }
+  ]
+
+  # Will create sequentially.
+  boxes.each do |opts|
+    config.vm.define opts[:name] do |config|
+      config.vm.hostname = opts[:name]
+      config.vm.network :private_network, ip: opts[:ip]
+      config.vm.provision "shell", inline: opts[:script]
+    end
+  end
+end

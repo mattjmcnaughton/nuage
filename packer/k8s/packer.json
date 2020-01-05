@@ -1,0 +1,75 @@
+{
+  "builders": [{
+    "type": "vagrant",
+    "communicator": "ssh",
+    "source_path": "../share/boxes/ubuntu-1804-20190726.box",
+    "provider": "virtualbox",
+    "box_name": "ubuntu-base",
+    "teardown_method": "destroy",
+    "add_force": true
+  }, {
+    "type": "amazon-ebs",
+    "region": "us-east-1",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "name": "ubuntu/images/*ubuntu-bionic-18.04-amd64-server-*",
+        "root-device-type": "ebs"
+      },
+      "owners": ["099720109477"],
+      "most_recent": true
+    },
+    "instance_type": "m3.medium",
+    "ssh_username": "ubuntu",
+    "ami_name": "k8s-{{isotime | clean_resource_name}}",
+    "tags": {
+      "project": "nuage",
+      "Name": "k8s-{{isotime | clean_resource_name}}",
+      "name": "k8s-{{isotime | clean_resource_name}}",
+      "fullname": "k8s-{{isotime | clean_resource_name}}",
+      "base_image_ami": "{{ .SourceAMI }}",
+      "base_image_name": "{{ .SourceAMIName }}",
+      "date": "{{isotime | clean_resource_name}}"
+    }
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "script": "../share/scripts/install-ansible.sh"
+  }, {
+    "type": "ansible",
+    "playbook_file": "./playbook.yml",
+    "ansible_env_vars": [
+      "ANSIBLE_ROLES_PATH=../share/roles"
+    ],
+    "override": {
+      "vagrant": {
+        "extra_arguments": [
+        ]
+      }
+    }
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/tests/linux-baseline"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.entropy-generator/test/integration/default/"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.system-security-upgrades/test/integration/default/"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.ssh-hardening-lite/test/integration/default/"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.k8s/test/integration/default/"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.firewall/test/integration/default/"
+  }]
+}
