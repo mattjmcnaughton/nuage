@@ -4,6 +4,8 @@
 
   tasks:
     - include_role:
+        name: mattjmcnaughton.base-packages
+    - include_role:
         name: mattjmcnaughton.entropy-generator
     - include_role:
         name: dev-sec.os-hardening

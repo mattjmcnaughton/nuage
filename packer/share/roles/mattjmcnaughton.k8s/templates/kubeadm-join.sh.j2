@@ -1,13 +1,12 @@
 #!/bin/bash
 
-# Must have download discovery file (which we upload to s3 after we launch the
-# master).
-#
-# Not entirely sure how we will handle the master failing/needing to be
-# restarted... I presume we will need to delete all of our workers?
-#
-# Definitely need to think about the back up strategy.
+RUN_ONCE_PATH=/var/run/kubeadm-run-once
+
+# Short-circuit if we've already run kubeadm on the host.
+[ -e $RUN_ONCE_PATH ] && exit 0
 
 kubeadm join \
   --discovery-file ${KUBEADM_DISCOVERY_FILE} \
-  --dry-run
+  -v 5
+
+touch $RUN_ONCE_PATH

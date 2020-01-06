@@ -1,13 +1,15 @@
 #!/bin/bash
 
-# Perform some check for if kubernetes is already running.
+RUN_ONCE_PATH=/var/run/kubeadm-run-once
+
+# Short-circuit if we've already run kubeadm on the host.
+[ -e $RUN_ONCE_PATH ] && exit 0
 
 kubeadm init \
-  --token=${KUBEADM_TOKEN} \
-  --certificate-key=${KUBEADM_CERTIFICATE_KEY} \
   --pod-network-cidr="{{ flannel_pod_network_cidr }}" \
+  --apiserver-advertise-address="${KUBEADM_IP_ADVERTISE:-$(hostname -I | cut -d ' ' -f1)}" \
+  --upload-certs \
   --skip-token-print \
-  --skip-certificate-key-print \
-  --dry-run
+  -v 5
 
-# Upload the `/etc/kubernetes/admin.conf` file.
+touch $RUN_ONCE_PATH

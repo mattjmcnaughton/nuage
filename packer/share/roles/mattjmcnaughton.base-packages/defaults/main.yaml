@@ -1,0 +1,8 @@
+---
+base_packages_package_list:
+  - apt-transport-https
+  - awscli
+  - ca-certificates
+  - curl
+  - software-properties-common
+  - wget

@@ -1,0 +1,18 @@
+#cloud-config
+system_info:
+  default_user:
+    name: mattjmcnaughton
+
+write_files:
+  - path: /root/kubeadm-init.sh
+    # Runs as root.
+    content: |
+      #!/bin/bash
+      set -ex
+
+      /usr/local/bin/kubeadm-init.sh
+
+      aws s3 cp /etc/kubernetes/admin.conf s3://${name_prefix}-mattjmcnaughton/k8s/admin.conf
+
+runcmd:
+  - bash /root/kubeadm-init.sh

@@ -1,0 +1,13 @@
+---
+- name: Perform install actions as root
+  block:
+    - name: Update apt cache if necessary
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600  # in seconds
+
+    - name: Install packages necessary for managing apt repos
+      apt:
+        pkg: "{{ base_packages_package_list }}"
+        state: present
+  become: yes

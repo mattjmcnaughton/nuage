@@ -7,12 +7,16 @@ Vagrant.configure("2") do |config|
   # Assume tne `/vagrant` is bound.
 
   $master_script = <<-M_SCRIPT
-  sudo kubeadm init --pod-network-cidr="10.244.0.0/16" --apiserver-advertise-address 192.168.3.2 --upload-certs
+  export KUBEADM_IP_ADVERTISE=192.168.3.2
+  sudo -E /usr/local/bin/kubeadm-init.sh
+
   sudo cp /etc/kubernetes/admin.conf /vagrant/
   M_SCRIPT
 
   $worker_script = <<-W_SCRIPT
-  sudo kubeadm join --discovery-file /vagrant/admin.conf -v 5
+  export KUBEADM_DISCOVERY_FILE=/vagrant/admin.conf
+
+  sudo -E /usr/local/bin/kubeadm-join.sh
   W_SCRIPT
 
   $tester_script = <<-T_SCRIPT

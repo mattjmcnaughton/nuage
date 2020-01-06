@@ -1,0 +1,21 @@
+#cloud-config
+system_info:
+  default_user:
+    name: mattjmcnaughton
+
+write_files:
+  - path: /root/kubeadm-init.sh
+    # Runs as root.
+    content: |
+      #!/bin/bash
+      set -ex
+
+      export KUBEADM_DISCOVERY_FILE=/tmp/discovery.conf
+      aws s3 cp s3://${name_prefix}-mattjmcnaughton/k8s/admin.conf $KUBEADM_DISCOVERY_FILE
+
+      /usr/local/bin/kubeadm-join.sh
+
+      shred -u $KUBEADM_DISCOVERY_FILE
+
+runcmd:
+  - bash /root/kubeadm-join.sh
