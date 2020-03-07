@@ -24,6 +24,8 @@
           - "443"
           - "6443"
     - include_role:
+        name: mattjmcnaughton.docker
+    - include_role:
         name: mattjmcnaughton.k8s
     # It is the responsibility of every application image to include the
     # `mattjmcnaughton.system-security-upgrades` role. Place as the last step, so

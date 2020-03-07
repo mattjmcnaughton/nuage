@@ -1,0 +1,39 @@
+---
+- name: Perform install actions as root
+  block:
+    - name: Update apt cache if necessary
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600  # in seconds
+
+    - name: Install packages necessary for managing apt repos
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Add docker apt repo key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+      register: docker_apt_key
+
+    - name: Add the docker apt repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+      register: docker_apt_repository
+
+    - name: Run apt update when necessary
+      apt:
+        update_cache: yes
+      when: docker_apt_key.changed or docker_apt_repository.changed
+
+    - name: Install docker-ce
+      apt:
+        pkg:
+          - docker-ce
+        state: present
+  become: yes

@@ -5,5 +5,8 @@
         name: net.bridge.bridge-nf-call-iptables
         value: '1'
         state: present
+      # Ignore errors because this sysctl value might not exist (depending on if
+      # docker installed).
+      ignore_errors: yes
   become: yes
 

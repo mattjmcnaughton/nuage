@@ -15,30 +15,6 @@
           - software-properties-common
         state: present
 
-    # Docker... will eventually become its own role.
-    - name: Add docker apt repo key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-      register: docker_apt_key
-
-    - name: Add the docker apt repository
-      apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
-        state: present
-      register: docker_apt_repository
-
-    - name: Run apt update when necessary
-      apt:
-        update_cache: yes
-      when: docker_apt_key.changed or docker_apt_repository.changed
-
-    - name: Install docker-ce
-      apt:
-        pkg:
-          - docker-ce
-        state: present
-
-    # k8s...
     - name: Add k8s apt repo key
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg

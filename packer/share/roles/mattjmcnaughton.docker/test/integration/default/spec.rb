@@ -1,6 +1,5 @@
 packages = %w(
-  kubelet
-  kubeadm
+  docker-ce
 )
 
 packages.each do |package|
@@ -10,10 +9,11 @@ packages.each do |package|
 end
 
 services = %w(
-  kubelet
+  docker
 )
 
 running_services = %w(
+  docker
 )
 
 services.each do |service|
@@ -23,8 +23,6 @@ services.each do |service|
 
     if running_services.include? service
       it { should be_running }
-    else
-      it { should_not be_running }
     end
   end
 end

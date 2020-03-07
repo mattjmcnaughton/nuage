@@ -3,5 +3,3 @@
   tasks:
     - include_role:
         name: mattjmcnaughton.docker
-    - include_role:
-        name: mattjmcnaughton.k8s

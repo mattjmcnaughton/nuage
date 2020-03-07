@@ -66,6 +66,10 @@
   }, {
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/roles/mattjmcnaughton.docker/test/integration/default/"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
     "profile": "../share/roles/mattjmcnaughton.k8s/test/integration/default/"
   }, {
     "type": "inspec",

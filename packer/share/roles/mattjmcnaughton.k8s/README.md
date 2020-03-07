@@ -6,6 +6,9 @@ NOTE, we do not actually run `kubeadm`. We will do that when bootstrapping the
 hosts (i.e. as part of the cloud_init script)... We create the scripts we will
 run.
 
+Also, this role is not responsible for installing docker. We leave that to a
+separate role.
+
 ## Helpful links
 
 - https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
