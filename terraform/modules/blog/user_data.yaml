@@ -6,6 +6,10 @@ system_info:
 write_files:
   - path: /root/ssl.sh
     # Runs as root.
+    #
+    # @TODO(mattjmcnaughton) Could make the `mattjmcnaughton.nginx` ansible role
+    # responsible for creating this script. Then `user_data.yaml` would just
+    # need to run it... Could have the domain name be an option.
     content: |
       #!/bin/bash
       set -ex
