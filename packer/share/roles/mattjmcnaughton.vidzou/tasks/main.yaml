@@ -1,4 +1,8 @@
 ---
+- name: Install docker via our docker role
+  include_role:
+    name: mattjmcnaughton.docker
+
 - name: Install nginx via our nginx role
   include_role:
     name: mattjmcnaughton.nginx
@@ -9,8 +13,12 @@
     nginx_vhost_location_config: ""
 
 - name: Get docker group id
-  shell: "getent group docker | cut -d: -f3"
+  shell: |
+    set -o pipefail
+    getent group docker | cut -d: -f3
   register: docker_group_shell
+  changed_when:
+    - docker_group_shell.rc == 0
 
 - name: Parse docker group id
   set_fact:

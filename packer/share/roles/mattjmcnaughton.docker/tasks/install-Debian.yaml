@@ -36,4 +36,10 @@
         pkg:
           - docker-ce
         state: present
+
+    - name: Install docker py library
+      apt:
+        pkg:
+          - python3-docker
+        state: present
   become: yes

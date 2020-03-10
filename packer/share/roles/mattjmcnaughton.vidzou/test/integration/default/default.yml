@@ -11,6 +11,4 @@
       vars:
         entropy_generator_sleep_to_allow_entropy_generation: 5
     - include_role:
-        name: mattjmcnaughton.docker
-    - include_role:
         name: mattjmcnaughton.vidzou

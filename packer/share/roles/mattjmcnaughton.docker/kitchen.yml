@@ -27,3 +27,5 @@ verifier:
 
 suites:
   - name: default
+  # @TODO(mattjmcnaughton) Include
+  # https://github.com/dev-sec/cis-docker-benchmark as a test suite.

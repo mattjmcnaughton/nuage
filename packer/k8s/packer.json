@@ -54,6 +54,10 @@
   }, {
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],
+    "profile": "../share/tests/cis-docker-benchmark"
+  }, {
+    "type": "inspec",
+    "extra_arguments": ["--no-distinct-exit"],
     "profile": "../share/roles/mattjmcnaughton.entropy-generator/test/integration/default/"
   }, {
     "type": "inspec",
