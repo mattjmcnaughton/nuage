@@ -54,11 +54,8 @@
   }, {
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],
+    "attributes": ["inputs.yaml"],
     "profile": "../share/tests/linux-baseline"
-  }, {
-    "type": "inspec",
-    "extra_arguments": ["--no-distinct-exit"],
-    "profile": "../share/tests/cis-docker-benchmark"
   }, {
     "type": "inspec",
     "extra_arguments": ["--no-distinct-exit"],
@@ -73,7 +70,7 @@
     "profile": "../share/roles/mattjmcnaughton.ssh-hardening-lite/test/integration/default/"
   }, {
     "type": "inspec",
-    "extra_arguments": ["--no-distinct-exit"],
+    "extra_arguments": ["--sudo", "--no-distinct-exit"],
     "profile": "../share/roles/mattjmcnaughton.vidzou/test/integration/default/"
   }, {
     "type": "inspec",

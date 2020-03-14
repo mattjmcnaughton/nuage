@@ -22,11 +22,6 @@
           - "22"
           - "80"
           - "443"
-    # @TODO(mattjmcnaughton) Maybe it actually does make sense to have Ansible
-    # roles require other Ansible roles... instead of listing them all in the
-    # playbook?
-    - include_role:
-        name: mattjmcnaughton.docker
     - include_role:
         name: mattjmcnaughton.vidzou
     # It is the responsibility of every application image to include the

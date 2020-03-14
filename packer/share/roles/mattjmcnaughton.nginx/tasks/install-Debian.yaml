@@ -12,7 +12,9 @@
 
     - name: Install python-passlib for htpasswd
       apt:
-        name: python-passlib
+        name:
+          - python-passlib
+          - python3-passlib
         state: present
       when: nginx_vhost_auth_basic
 
