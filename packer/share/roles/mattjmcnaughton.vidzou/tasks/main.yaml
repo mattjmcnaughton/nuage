@@ -7,10 +7,15 @@
   include_role:
     name: mattjmcnaughton.nginx
   vars:
-    # TODO: configure nginx
     nginx_vhost_auth_basic: true
-    nginx_vhost_extra_misc_config: ""
-    nginx_vhost_location_config: ""
+    nginx_vhost_auth_basic_realm: vidzou
+    # Proxy requests to the go server.
+    nginx_vhost_location_config: |
+      location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://localhost:{{ vidzou_port }};
+      }
 
 - name: Get docker group id
   shell: |
@@ -26,6 +31,12 @@
   set_fact:
     docker_group_id: "{{ docker_group_shell.stdout_lines[0] }}"
 
+- name: Write .env file
+  template:
+    src: vidzou.env.j2
+    dest: "{{ vidzou_env_file }}"
+    mode: '0644'
+
 - name: Run vidzou container
   docker_container:
     name: vidzou
@@ -38,8 +49,5 @@
     volumes: "{{ vidzou_volume_mappings }}"
     groups:
       - "{{ docker_group_id }}"
-    # TODO: Can use `env_file` to set environment variables and overwrite when
-    # launching env specific host and then issue container restart command...
-    env:
-      VIDZOU_S3_BUCKET: mattjmcnaughton-test-vidzou-bucket
+    env_file: "{{ vidzou_env_file }}"
     # TODO: Consider the log driver
