@@ -1,5 +1,6 @@
 ---
-vidzou_image_tag: mattjmcnaughton/vidzou:1583702177
+vidzou_image_version: 1584151828
+vidzou_image_tag: "mattjmcnaughton/vidzou:{{ vidzou_image_version }}"
 vidzou_port_mappings:
   - "8080:8080"
 vidzou_volume_mappings:

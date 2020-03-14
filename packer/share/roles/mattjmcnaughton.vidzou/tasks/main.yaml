@@ -16,25 +16,30 @@
   shell: |
     set -o pipefail
     getent group docker | cut -d: -f3
+  args:
+    executable: /bin/bash
   register: docker_group_shell
   changed_when:
     - docker_group_shell.rc == 0
 
 - name: Parse docker group id
   set_fact:
-    docker_group_id: docker_group_shell.stdout_lines[0]
+    docker_group_id: "{{ docker_group_shell.stdout_lines[0] }}"
 
 - name: Run vidzou container
   docker_container:
     name: vidzou
     image: "{{ vidzou_image_tag }}"
-    state: present
+    # Could also just load the container on the machine and not actually start
+    # it (i.e. `present`) but that makes testing slightly harder.
+    state: started
     restart_policy: unless-stopped
     ports: "{{ vidzou_port_mappings }}"
     volumes: "{{ vidzou_volume_mappings }}"
     groups:
       - "{{ docker_group_id }}"
     # TODO: Can use `env_file` to set environment variables and overwrite when
-    # launching specific host and then issue container restart command...
-    #
-    # Consider the log driver
+    # launching env specific host and then issue container restart command...
+    env:
+      VIDZOU_S3_BUCKET: mattjmcnaughton-test-vidzou-bucket
+    # TODO: Consider the log driver
