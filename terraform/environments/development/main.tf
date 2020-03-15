@@ -50,3 +50,17 @@ module "blog" {
     module.bastion.allow_ssh_ingress_from_bastion_id
   ]
 }
+
+module "vidzou" {
+  source = "../../modules/vidzou"
+
+  environment = local.environment
+
+  vpc_id = module.vpc.vpc_id
+  public_subnet_ids = module.vpc.public_subnets
+  private_subnet_ids = module.vpc.private_subnets
+
+  extra_host_security_groups = [
+    module.bastion.allow_ssh_ingress_from_bastion_id
+  ]
+}

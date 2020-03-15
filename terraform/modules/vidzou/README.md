@@ -1,3 +1,3 @@
-# [WIP] vidzou
+# vidzou
 
 Model after `blog` module.

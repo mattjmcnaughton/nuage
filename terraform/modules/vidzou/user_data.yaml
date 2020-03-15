@@ -1,0 +1,43 @@
+#cloud-config
+system_info:
+  default_user:
+    name: mattjmcnaughton
+
+write_files:
+  - path: /root/ssl.sh
+    # Runs as root.
+    #
+    # @TODO(mattjmcnaughton) Could make the `mattjmcnaughton.nginx` ansible role
+    # responsible for creating this script. Then `user_data.yaml` would just
+    # need to run it... Could have the domain name be an option.
+    content: |
+      #!/bin/bash
+      set -ex
+
+      # To be safe, stop nginx while we replace the certs. We don't want anyone
+      # trying to access the site while its using the self-signed certs.
+      systemctl stop nginx.service
+      docker stop vidzou
+
+      aws s3 cp s3://g-mattjmcnaughton/ssl/mattjmcnaughton.com/fullchain.pem /etc/ssl/certs/fullchain.pem
+      aws s3 cp s3://g-mattjmcnaughton/ssl/mattjmcnaughton.com/privkey.pem /etc/ssl/private/privkey.pem
+
+      chmod 0600 /etc/ssl/certs/fullchain.pem
+      chmod 0600 /etc/ssl/private/privkey.pem
+
+      rm /etc/ssl/certs/mattjmcnaughton.com.crt
+      ln -s /etc/ssl/certs/fullchain.pem /etc/ssl/certs/mattjmcnaughton.com.crt
+
+      rm /etc/ssl/private/mattjmcnaughton.com.key
+      ln -s /etc/ssl/private/privkey.pem /etc/ssl/private/mattjmcnaughton.com.key
+
+      # @TODO(mattjmcnaughton) Make less manual...
+      rm /tmp/vidzou.env || true
+      echo "VIDZOU_S3_BUCKET=${vidzou_bucket}" > /tmp/vidzou.env
+      chmod 0644 vidzou.env
+
+      docker start vidzou
+      systemctl start nginx.service
+
+runcmd:
+  - bash /root/ssl.sh
