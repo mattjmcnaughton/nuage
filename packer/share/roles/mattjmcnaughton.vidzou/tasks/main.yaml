@@ -31,16 +31,20 @@
   set_fact:
     docker_group_id: "{{ docker_group_shell.stdout_lines[0] }}"
 
-- name: Write .env file
+- name: Write yaml file
   template:
-    src: vidzou.env.j2
-    dest: "{{ vidzou_env_file }}"
+    src: vidzou.yaml.j2
+    dest: "{{ vidzou_yaml_file }}"
     mode: '0644'
 
 - name: Run vidzou container
   docker_container:
     name: vidzou
     image: "{{ vidzou_image_tag }}"
+    entrypoint:
+      - "./main"
+      - "-config_file_path"
+      - "{{ vidzou_yaml_file }}"
     # Could also just load the container on the machine and not actually start
     # it (i.e. `present`) but that makes testing slightly harder.
     state: started
@@ -49,5 +53,4 @@
     volumes: "{{ vidzou_volume_mappings }}"
     groups:
       - "{{ docker_group_id }}"
-    env_file: "{{ vidzou_env_file }}"
     # TODO: Consider the log driver

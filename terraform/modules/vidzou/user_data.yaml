@@ -32,9 +32,9 @@ write_files:
       ln -s /etc/ssl/private/privkey.pem /etc/ssl/private/mattjmcnaughton.com.key
 
       # @TODO(mattjmcnaughton) Make less manual...
-      rm /tmp/vidzou.env || true
-      echo "VIDZOU_S3_BUCKET=${vidzou_bucket}" > /tmp/vidzou.env
-      chmod 0644 vidzou.env
+      rm /tmp/vidzou.yaml || true
+      printf -- "---\ns3_bucket: ${vidzou_bucket}" > /tmp/vidzou.yaml
+      chmod 0644 /tmp/vidzou.yaml
 
       docker start vidzou
       systemctl start nginx.service

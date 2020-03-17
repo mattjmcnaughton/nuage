@@ -12,7 +12,7 @@ nginx_ssl_csr_path: "{{ nginx_ssl_root }}/private/{{ nginx_common_name }}.csr"
 nginx_ssl_cert_path: "{{ nginx_ssl_cert_root }}/{{ nginx_common_name }}.crt"
 
 nginx_dhparams_path: "{{ nginx_ssl_cert_root }}/dhparams.pem"
-nginx_dhparams_size: 4096
+nginx_dhparams_size: 2048
 
 nginx_snippets_root: /etc/nginx/snippets
 nginx_snippets_ssl_certs_path: "{{ nginx_snippets_root }}/ssl-certs.conf"

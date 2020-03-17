@@ -1,5 +1,5 @@
 ---
-vidzou_image_version: 1584151828
+vidzou_image_version: 1584392801
 vidzou_image_tag: "mattjmcnaughton/vidzou:{{ vidzou_image_version }}"
 vidzou_port: 8080
 vidzou_port_mappings:
@@ -7,4 +7,4 @@ vidzou_port_mappings:
 vidzou_volume_mappings:
   - /tmp:/tmp
   - /var/run/docker.sock:/var/run/docker.sock
-vidzou_env_file: /tmp/vidzou.env
+vidzou_yaml_file: /tmp/vidzou.yaml
