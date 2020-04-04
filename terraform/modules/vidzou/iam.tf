@@ -59,9 +59,46 @@ resource "aws_iam_policy" "read_write_vidzou_bucket" {
 EOF
 }
 
+resource "aws_iam_policy" "read_vidzou_htpasswd" {
+  name = "${local.name_prefix}-vidzou-htpasswd"
+  description = "Allow access to vidzou htpasswd"
+  path = local.iam_default_path
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:s3:::g-mattjmcnaughton"
+      ]
+    },
+    {
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:s3:::g-mattjmcnaughton/htpasswd/vidzou.htpasswd"
+      ]
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_role_policy_attachment" "attach_vidzou_read_write_vidzou_bucket" {
   role = aws_iam_role.vidzou.name
   policy_arn = aws_iam_policy.read_write_vidzou_bucket.arn
+}
+
+resource "aws_iam_role_policy_attachment" "attach_vidzou_read_vidzou_htpasswd" {
+  role = aws_iam_role.vidzou.name
+  policy_arn = aws_iam_policy.read_vidzou_htpasswd.arn
 }
 
 resource "aws_iam_role_policy_attachment" "attach_vidzou_extra_iam_policies" {

@@ -4,7 +4,7 @@ system_info:
     name: mattjmcnaughton
 
 write_files:
-  - path: /root/ssl.sh
+  - path: /root/init.sh
     # Runs as root.
     #
     # @TODO(mattjmcnaughton) Could make the `mattjmcnaughton.nginx` ansible role
@@ -21,15 +21,22 @@ write_files:
 
       aws s3 cp s3://g-mattjmcnaughton/ssl/mattjmcnaughton.com/fullchain.pem /etc/ssl/certs/fullchain.pem
       aws s3 cp s3://g-mattjmcnaughton/ssl/mattjmcnaughton.com/privkey.pem /etc/ssl/private/privkey.pem
+      aws s3 cp s3://g-mattjmcnaughton/htpasswd/vidzou.htpasswd /etc/nginx/vidzou.htpasswd
 
       chmod 0600 /etc/ssl/certs/fullchain.pem
       chmod 0600 /etc/ssl/private/privkey.pem
+      chmod 0600 /etc/nginx/vidzou.htpasswd
+      # Must be owned by `www-data` (i.e. the nginx user).
+      chown www-data /etc/nginx/vidzou.htpasswd
 
       rm /etc/ssl/certs/mattjmcnaughton.com.crt
       ln -s /etc/ssl/certs/fullchain.pem /etc/ssl/certs/mattjmcnaughton.com.crt
 
       rm /etc/ssl/private/mattjmcnaughton.com.key
       ln -s /etc/ssl/private/privkey.pem /etc/ssl/private/mattjmcnaughton.com.key
+
+      rm /etc/nginx/.htpasswd
+      ln -s /etc/nginx/vidzou.htpasswd /etc/nginx/.htpasswd
 
       # @TODO(mattjmcnaughton) Make less manual...
       rm /tmp/vidzou.yaml || true
@@ -40,4 +47,4 @@ write_files:
       systemctl start nginx.service
 
 runcmd:
-  - bash /root/ssl.sh
+  - bash /root/init.sh
