@@ -25,41 +25,6 @@ resource "aws_iam_role" "vidzou" {
   }
 }
 
-# TODO: We will DEFINITELY want to extract this component.
-resource "aws_iam_policy" "access_mattjmcnaughton_com_ssl_certs" {
-  name = "${local.name_prefix}-access-ssl-certs"
-  description = "Allow access to mattjmcnaughton.com ssl certs"
-  path = local.iam_default_path
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "s3:ListBucket"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "arn:aws:s3:::g-mattjmcnaughton"
-      ]
-    },
-    {
-      "Action": [
-        "s3:GetObject"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "arn:aws:s3:::g-mattjmcnaughton/ssl/mattjmcnaughton.com/*"
-      ]
-    }
-  ]
-}
-EOF
-}
-
-# TODO: Need to create a policy for retrieving the `.htaccess`...
-
 resource "aws_iam_policy" "read_write_vidzou_bucket" {
   name = "${local.name_prefix}-read-write-vidzou-bucket"
   description = "Allow read/write in bucket where we store vidzou content"
@@ -94,14 +59,15 @@ resource "aws_iam_policy" "read_write_vidzou_bucket" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "attach_vidzou_access_mattjmcnaughton_com_ssl_certs" {
-  role = aws_iam_role.vidzou.name
-  policy_arn = aws_iam_policy.access_mattjmcnaughton_com_ssl_certs.arn
-}
-
 resource "aws_iam_role_policy_attachment" "attach_vidzou_read_write_vidzou_bucket" {
   role = aws_iam_role.vidzou.name
   policy_arn = aws_iam_policy.read_write_vidzou_bucket.arn
+}
+
+resource "aws_iam_role_policy_attachment" "attach_vidzou_extra_iam_policies" {
+  count = length(var.extra_host_iam_policy)
+  role = aws_iam_role.vidzou.name
+  policy_arn = var.extra_host_iam_policy[count.index]
 }
 
 resource "aws_iam_instance_profile" "vidzou" {

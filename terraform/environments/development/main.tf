@@ -37,6 +37,13 @@ module "bastion" {
   private_subnet_ids = module.vpc.private_subnets
 }
 
+module "base" {
+  source = "../../modules/base"
+
+  environment = local.environment
+  vpc_id = module.vpc.vpc_id
+}
+
 module "blog" {
   source = "../../modules/blog"
 
@@ -46,8 +53,17 @@ module "blog" {
   public_subnet_ids = module.vpc.public_subnets
   private_subnet_ids = module.vpc.private_subnets
 
+  extra_host_iam_policy = [
+    module.base.aws_iam_policy_access_mattjmcnaughton_ssl_certs_arn
+  ]
+
   extra_host_security_groups = [
     module.bastion.allow_ssh_ingress_from_bastion_id
+  ]
+
+  extra_elb_security_groups = [
+    module.base.aws_security_group_allow_http_ingress_from_all_id,
+    module.base.aws_security_group_allow_https_ingress_from_all_id
   ]
 }
 
@@ -60,7 +76,16 @@ module "vidzou" {
   public_subnet_ids = module.vpc.public_subnets
   private_subnet_ids = module.vpc.private_subnets
 
+  extra_host_iam_policy = [
+    module.base.aws_iam_policy_access_mattjmcnaughton_ssl_certs_arn
+  ]
+
   extra_host_security_groups = [
     module.bastion.allow_ssh_ingress_from_bastion_id
+  ]
+
+  extra_elb_security_groups = [
+    module.base.aws_security_group_allow_http_ingress_from_all_id,
+    module.base.aws_security_group_allow_https_ingress_from_all_id
   ]
 }

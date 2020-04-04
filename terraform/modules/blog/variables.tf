@@ -22,10 +22,18 @@ variable "environment" {
   type = string
 }
 
+variable "extra_host_iam_policy" {
+  description = "The additional iam policies we want to add to the host"
+  type = list(string)
+}
+
 variable "extra_host_security_groups" {
-  # We pass these values explicitly as a variable so terraform knows that the
-  # `vpc` must succeed in creating them before it can create the `blog` host.
   description = "The additional security groups we want to add to the host"
+  type = list(string)
+}
+
+variable "extra_elb_security_groups" {
+  description = "The additional security groups we want to add to the elb"
   type = list(string)
 }
 

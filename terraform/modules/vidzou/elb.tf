@@ -3,11 +3,9 @@ module "vidzou_elb" {
 
   name = "${local.name_prefix}-vidzou-elb"
 
-  security_groups = [
+  security_groups = concat([
     aws_security_group.vidzou_elb.id,
-    aws_security_group.allow_http_ingress_from_all.id,
-    aws_security_group.allow_https_ingress_from_all.id,
-  ]
+  ], var.extra_elb_security_groups)
   subnets = var.public_subnet_ids
   internal = false
 
