@@ -49,7 +49,7 @@ module "vidzou_asg" {
   ], var.extra_host_security_groups)
   load_balancers = [module.vidzou_elb.this_elb_id]
 
-  vpc_zone_identifier = var.private_subnet_ids
+  vpc_zone_identifier = var.public_subnet_ids
 
   asg_name = "${local.name_prefix}-vidzou-asg"
   health_check_type = "EC2"

@@ -47,7 +47,7 @@ module "blog_asg" {
   ], var.extra_host_security_groups)
   load_balancers = [module.blog_elb.this_elb_id]
 
-  vpc_zone_identifier = var.private_subnet_ids
+  vpc_zone_identifier = var.public_subnet_ids
 
   asg_name = "${local.name_prefix}-blog-asg"
   health_check_type = "EC2"

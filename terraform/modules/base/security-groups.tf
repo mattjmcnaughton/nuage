@@ -1,3 +1,25 @@
+resource "aws_security_group" "allow_ssh_ingress_from_all" {
+  name = "${local.name_prefix}-allow-ssh-ingress-from-all"
+  description = "Security group allowing ssh ingress from all ips"
+  vpc_id = var.vpc_id
+
+  ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${local.name_prefix}-allow-ssh-ingress-from-all"
+    name = "${local.name_prefix}-allow-ssh-ingress-from-all"
+    environment = var.environment
+    Terraform = "true"
+    project = "nuage"
+  }
+}
+
+
 resource "aws_security_group" "allow_http_ingress_from_all" {
   name = "${local.name_prefix}-allow-http-ingress-from-all"
   description = "Security group allowing http ingress from all ips"
