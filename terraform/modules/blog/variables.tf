@@ -5,15 +5,8 @@ variable "vpc_id" {
 
 variable "public_subnet_ids" {
   # We pass these values explicitly as a variable so terraform knows that the
-  # `vpc` must succeed in creating them before it can create the `bastion` host.
-  description = "The ids of the public subnets in which we will launch bastion ELB."
-  type = list(string)
-}
-
-variable "private_subnet_ids" {
-  # We pass these values explicitly as a variable so terraform knows that the
-  # `vpc` must succeed in creating them before it can create the `bastion` host.
-  description = "The ids of the private subnets in which we will launch the bastion hosts."
+  # `vpc` must succeed in creating them before it can create the host.
+  description = "The ids of the public subnets in which we will launch the host."
   type = list(string)
 }
 
@@ -38,7 +31,7 @@ variable "extra_elb_security_groups" {
 }
 
 variable "aws_key_pair_key_name" {
-  description = "The key pair used to launch the bastion host"
+  description = "The key pair used to launch the host"
   default = "mattjmcnaughton_personal_rsa"
   type = string
 }

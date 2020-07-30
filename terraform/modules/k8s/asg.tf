@@ -41,8 +41,6 @@ module "k8s_master_asg" {
     aws_security_group.k8s.id,
   ], var.extra_host_security_groups)
 
-  vpc_zone_identifier = var.private_subnet_ids
-
   asg_name = "${local.name_prefix}-k8s-master-asg"
   health_check_type = "EC2"
   min_size = 0
