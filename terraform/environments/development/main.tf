@@ -28,6 +28,7 @@ module "base" {
   source = "../../modules/base"
 
   environment = local.environment
+  public_subnet_ids = module.vpc.public_subnets
   vpc_id = module.vpc.vpc_id
 }
 
@@ -44,12 +45,16 @@ module "blog" {
   ]
 
   extra_host_security_groups = [
-    module.base.aws_security_group_allow_ssh_ingress_from_all_id
+    module.base.aws_security_group_allow_ssh_ingress_from_all_id,
+    module.base.aws_security_group_allow_http_ingress_from_main_alb_id,
+    module.base.aws_security_group_allow_https_ingress_from_main_alb_id
   ]
 
-  extra_elb_security_groups = [
-    module.base.aws_security_group_allow_http_ingress_from_all_id,
-    module.base.aws_security_group_allow_https_ingress_from_all_id
+  main_aws_lb_dns_name = module.base.aws_lb_main_dns_name
+  main_aws_lb_zone_id = module.base.aws_lb_main_zone_id
+  main_aws_lb_listener_https_arn = module.base.aws_lb_listener_main_https_arn
+  extra_lb_target_groups = [
+    module.base.aws_lb_target_group_default_arn
   ]
 }
 
@@ -66,11 +71,12 @@ module "vidzou" {
   ]
 
   extra_host_security_groups = [
-    module.base.aws_security_group_allow_ssh_ingress_from_all_id
+    module.base.aws_security_group_allow_ssh_ingress_from_all_id,
+    module.base.aws_security_group_allow_http_ingress_from_main_alb_id,
+    module.base.aws_security_group_allow_https_ingress_from_main_alb_id
   ]
 
-  extra_elb_security_groups = [
-    module.base.aws_security_group_allow_http_ingress_from_all_id,
-    module.base.aws_security_group_allow_https_ingress_from_all_id
-  ]
+  main_aws_lb_dns_name = module.base.aws_lb_main_dns_name
+  main_aws_lb_zone_id = module.base.aws_lb_main_zone_id
+  main_aws_lb_listener_https_arn = module.base.aws_lb_listener_main_https_arn
 }

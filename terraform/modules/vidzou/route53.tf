@@ -8,18 +8,18 @@ resource "aws_route53_record" "env_vidzou" {
   name = "${local.name_prefix}-vidzou.mattjmcnaughton.com"
   type = "CNAME"
   ttl = "300"
-  records = [module.vidzou_elb.this_elb_dns_name]
+  records = [var.main_aws_lb_dns_name]
 }
 
 resource "aws_route53_record" "additional_alias_record" {
-  count = length(var.additional_alias_records_for_elb)
+  count = length(var.additional_alias_records_for_lb)
   zone_id = data.aws_route53_zone.public.zone_id
-  name = var.additional_alias_records_for_elb[count.index]
+  name = var.additional_alias_records_for_lb[count.index]
   type = "A"
 
   alias {
-    name = module.vidzou_elb.this_elb_dns_name
-    zone_id = module.vidzou_elb.this_elb_zone_id
+    name = var.main_aws_lb_dns_name
+    zone_id = var.main_aws_lb_zone_id
     evaluate_target_health = false
   }
 }

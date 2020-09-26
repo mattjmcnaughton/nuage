@@ -44,10 +44,10 @@ module "vidzou_asg" {
 
   security_groups = concat([
     aws_security_group.vidzou.id,
-    aws_security_group.allow_http_ingress_from_vidzou_elb.id,
-    aws_security_group.allow_https_ingress_from_vidzou_elb.id,
   ], var.extra_host_security_groups)
-  load_balancers = [module.vidzou_elb.this_elb_id]
+  target_group_arns = concat([
+    aws_lb_target_group.vidzou.arn
+  ], var.extra_lb_target_groups)
 
   vpc_zone_identifier = var.public_subnet_ids
 

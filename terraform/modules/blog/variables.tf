@@ -25,9 +25,25 @@ variable "extra_host_security_groups" {
   type = list(string)
 }
 
-variable "extra_elb_security_groups" {
-  description = "The additional security groups we want to add to the elb"
+variable "main_aws_lb_listener_https_arn" {
+  description = "Arn for main aws lb https listener"
+  type = string
+}
+
+variable "main_aws_lb_dns_name" {
+  description = "The dns name for our main aws lb"
+  type = string
+}
+
+variable "main_aws_lb_zone_id" {
+  description = "The zone id for the main aws lb"
+  type = string
+}
+
+variable "extra_lb_target_groups" {
+  description = "Extra lb target groups with which to register our asg instances"
   type = list(string)
+  default = []
 }
 
 variable "aws_key_pair_key_name" {
@@ -36,8 +52,8 @@ variable "aws_key_pair_key_name" {
   type = string
 }
 
-variable "additional_alias_records_for_elb" {
-  description = "Additional alias records for which we want to redirect the elb."
+variable "additional_alias_records_for_lb" {
+  description = "Additional alias records for which we want to redirect the lb."
   type = list(string)
   default = []
 }
