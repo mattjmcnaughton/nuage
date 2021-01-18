@@ -51,9 +51,10 @@ certbot certonly \
   - NOTE: When using `aws s3 cp` ensure we specify `--sse AES256` flag.
     - Eventually, we should set up a policy that everything we write to our s3
       buckets must be encrypted.
-6. Update the certs stored via Amazon's ACM. This is done via the `global`
+6. [Optional] Update the certs stored via Amazon's ACM. This is done via the `global`
    terraform environment. We can use `target` to only update `acm`. We may need
-   to update the ownership of the files.
+   to update the ownership of the files. This is OPTIONAL now that we don't use
+   an ALB (which is what required the ALB).
 7. Shred the ssl certs on the host and kill the container we used to generate
    them.
 8. Run `terraform destroy` in the orchestration directory.

@@ -1,5 +1,5 @@
 locals {
-  budget_limit_amount = "200"
+  budget_limit_amount = "50"
   budget_notification_email = "mattjmcnaughton@gmail.com"
 }
 
