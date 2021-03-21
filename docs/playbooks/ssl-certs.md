@@ -47,6 +47,7 @@ certbot certonly \
       so after creating the TXT record before asking the certbot to verify it.
 5. Upload the certs to s3 (can use `docker cp` to copy off the container if we
    forgot to mount a volume).
+  - We may need to change the permissions before uploading them.
   - Store in `s3://g-mattjmcnaughton/ssl/DOMAIN/...`
   - NOTE: When using `aws s3 cp` ensure we specify `--sse AES256` flag.
     - Eventually, we should set up a policy that everything we write to our s3
