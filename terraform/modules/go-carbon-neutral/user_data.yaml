@@ -1,0 +1,36 @@
+#cloud-config
+system_info:
+  default_user:
+    name: mattjmcnaughton
+
+write_files:
+  - path: /root/ssl.sh
+    # Runs as root.
+    #
+    # @TODO(mattjmcnaughton) Could make the `mattjmcnaughton.nginx` ansible role
+    # responsible for creating this script. Then `user_data.yaml` would just
+    # need to run it... Could have the domain name be an option.
+    content: |
+      #!/bin/bash
+      set -ex
+
+      # To be safe, stop nginx while we replace the certs. We don't want anyone
+      # trying to access the site while its using the self-signed certs.
+      systemctl stop nginx.service
+
+      aws s3 cp s3://g-mattjmcnaughton/ssl/go-carbon-neutral.com/fullchain.pem /etc/ssl/certs/fullchain.pem
+      aws s3 cp s3://g-mattjmcnaughton/ssl/go-carbon-neutral.com/privkey.pem /etc/ssl/private/privkey.pem
+
+      chmod 0600 /etc/ssl/certs/fullchain.pem
+      chmod 0600 /etc/ssl/private/privkey.pem
+
+      rm /etc/ssl/certs/go-carbon-neutral.com.crt
+      ln -s /etc/ssl/certs/fullchain.pem /etc/ssl/certs/go-carbon-neutral.com.crt
+
+      rm /etc/ssl/private/go-carbon-neutral.com.key
+      ln -s /etc/ssl/private/privkey.pem /etc/ssl/private/go-carbon-neutral.com.key
+
+      systemctl start nginx.service
+
+runcmd:
+  - bash /root/ssl.sh

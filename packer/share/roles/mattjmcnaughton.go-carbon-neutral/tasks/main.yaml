@@ -7,6 +7,7 @@
   include_role:
     name: mattjmcnaughton.nginx
   vars:
+    nginx_common_name: go-carbon-neutral.com
     nginx_vhost_auth_basic: false
     nginx_vhost_location_config: |
       location / {
