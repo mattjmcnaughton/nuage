@@ -1,0 +1,14 @@
+- hosts: all
+
+  vars:
+    nginx_dhparams_size: 1024
+
+  tasks:
+    # I believe generating the dhparams (which occurs in the nginx role) needs some entropy, so ensure we are
+    # generating it.
+    - include_role:
+        name: mattjmcnaughton.entropy-generator
+      vars:
+        entropy_generator_sleep_to_allow_entropy_generation: 5
+    - include_role:
+        name: mattjmcnaughton.go-carbon-neutral

@@ -22,7 +22,7 @@
 
     - name: Add the docker apt repository
       apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
         state: present
       register: docker_apt_repository
 
@@ -37,10 +37,16 @@
           - docker-ce
         state: present
 
-    - name: Install docker py library
+    - name: Install docker py3 library
+      apt:
+        pkg:
+          - python3-docker
+        state: present
+
+    - name: Install docker py2 library on bionic
       apt:
         pkg:
           - python-docker
-          - python3-docker
         state: present
+      when: ansible_lsb.codename == "bionic"
   become: yes

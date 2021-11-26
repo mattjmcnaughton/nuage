@@ -1,0 +1,24 @@
+---
+- name: Install docker via our docker role
+  include_role:
+    name: mattjmcnaughton.docker
+
+- name: Install nginx via our nginx role
+  include_role:
+    name: mattjmcnaughton.nginx
+  vars:
+    nginx_vhost_auth_basic: false
+    nginx_vhost_location_config: |
+      location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://localhost:{{ go_carbon_neutral_external_container_port }};
+      }
+
+- name: Run go_carbon_neutral container
+  docker_container:
+    name: go_carbon_neutral
+    image: "{{ go_carbon_neutral_image_tag }}"
+    state: started
+    restart_policy: unless-stopped
+    ports: "{{ go_carbon_neutral_port_mappings }}"
