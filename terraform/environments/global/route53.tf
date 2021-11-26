@@ -13,6 +13,10 @@ resource "aws_route53_zone" "mattjmcnaughton_io" {
   name = "mattjmcnaughton.io"
 }
 
+resource "aws_route53_zone" "go_carbon_neutral_com" {
+  name = "go-carbon-neutral.com"
+}
+
 # @TODO(mattjmcnaughton) We could extract the `aws_route53_zone` and
 # `aws_route53_record` necessary for creating a subdomain into a tested module.
 #
