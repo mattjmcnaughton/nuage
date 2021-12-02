@@ -1,4 +1,5 @@
 ---
+# Ensure stays synced w/ `orchestration/deploy-go-carbon-neutral/playbook.yml`.
 go_carbon_neutral_image_version: 0.0.1-beta
 go_carbon_neutral_image_tag: "mattjmcnaughton/go-carbon-neutral:{{ go_carbon_neutral_image_version }}"
 go_carbon_neutral_external_container_port: 8080

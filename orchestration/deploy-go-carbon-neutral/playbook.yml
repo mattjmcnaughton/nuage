@@ -1,0 +1,31 @@
+---
+- name: Deploy go-carbon-neutral
+  hosts: all
+
+  vars_prompt:
+    - name: go_carbon_neutral_image_version
+      private: no
+
+  vars:
+    # Ensure stays synced w/ `mattjmcnaughton.go-carbon-neutral/defaults/main.yml`.
+    go_carbon_neutral_image_tag: "mattjmcnaughton/go-carbon-neutral:{{ go_carbon_neutral_image_version }}"
+    go_carbon_neutral_external_container_port: 8080
+    go_carbon_neutral_internal_container_port: 80
+    go_carbon_neutral_port_mappings:
+      - "{{ go_carbon_neutral_external_container_port }}:{{ go_carbon_neutral_internal_container_port }}"
+
+  tasks:
+  - name: Run go_carbon_neutral container
+    docker_container:
+      name: go_carbon_neutral
+      image: "{{ go_carbon_neutral_image_tag }}"
+      state: started
+      restart_policy: unless-stopped
+      ports: "{{ go_carbon_neutral_port_mappings }}"
+    become: yes
+
+  - name: Restart nginx
+    ansible.builtin.service:
+      name: nginx
+      state: restarted
+    become: yes

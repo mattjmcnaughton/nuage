@@ -1,0 +1,13 @@
+---
+plugin: aws_ec2
+regions:
+  - us-east-1
+filters:
+  tag:name:
+    - "*-go-carbon-neutral"
+  instance-state-name: running
+keyed_groups:
+  - prefix: environment
+    key: tags['environment']
+hostnames:
+  - ip-address  # Use the public ip address
