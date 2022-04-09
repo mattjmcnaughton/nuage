@@ -108,3 +108,48 @@ resource "aws_route53_record" "fastmail_mx" {
     "20 in2-smtp.messagingengine.com"
   ]
 }
+
+
+# CNAMES to support DKIM
+
+resource "aws_route53_record" "fastmail_dkim_1" {
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name = "fm1._domainkey"
+  type = "CNAME"
+  ttl = "300"
+  records = [
+    "fm1.mattjmcnaughton.com.dkim.fmhosted.com"
+  ]
+}
+
+resource "aws_route53_record" "fastmail_dkim_2" {
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name = "fm2._domainkey"
+  type = "CNAME"
+  ttl = "300"
+  records = [
+    "fm2.mattjmcnaughton.com.dkim.fmhosted.com"
+  ]
+}
+
+resource "aws_route53_record" "fastmail_dkim_3" {
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name = "fm3._domainkey"
+  type = "CNAME"
+  ttl = "300"
+  records = [
+    "fm3.mattjmcnaughton.com.dkim.fmhosted.com"
+  ]
+}
+
+# TXT to support SPF
+
+resource "aws_route53_record" "fastmail_spf" {
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name = "mattjmcnaughton.com"  # Route53 is weird about us using "@" so specify full domain.
+  type = "TXT"
+  ttl = "300"
+  records = [
+    "v=spf1 include:spf.messagingengine.com ?all"
+  ]
+}
