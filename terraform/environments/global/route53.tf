@@ -95,3 +95,16 @@ resource "aws_route53_record" "global_mattjmcnaughton_io_ns" {
     aws_route53_zone.global_mattjmcnaughton_io.name_servers.3,
   ]
 }
+
+# Configuration for fastmail to send email via mattjmcnaughton.com.
+
+resource "aws_route53_record" "fastmail_mx" {
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name = "mattjmcnaughton.com"
+  type = "MX"
+  ttl = "300"
+  records = [
+    "10 in1-smtp.messagingengine.com",
+    "20 in2-smtp.messagingengine.com"
+  ]
+}
