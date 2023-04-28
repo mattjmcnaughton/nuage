@@ -17,6 +17,14 @@ resource "aws_route53_zone" "go_carbon_neutral_com" {
   name = "go-carbon-neutral.com"
 }
 
+resource "aws_route53_zone" "worldsbestpug_com" {
+  name = "worldsbestpug.com"
+}
+
+resource "aws_route53_zone" "thatsagoodpug_com" {
+  name = "thatsagoodpug.com"
+}
+
 # @TODO(mattjmcnaughton) We could extract the `aws_route53_zone` and
 # `aws_route53_record` necessary for creating a subdomain into a tested module.
 #
@@ -151,5 +159,27 @@ resource "aws_route53_record" "fastmail_spf" {
   ttl = "300"
   records = [
     "v=spf1 include:spf.messagingengine.com ?all"
+  ]
+}
+
+# Configuration for Pug websites to use sr.ht pages
+
+resource "aws_route53_record" "thatsagoodpug_a" {
+  zone_id = aws_route53_zone.thatsagoodpug_com.zone_id
+  name = "thatsagoodpug.com"
+  type = "A"
+  ttl = "300"
+  records = [
+    "173.195.146.139"
+  ]
+}
+
+resource "aws_route53_record" "worldsbestpug_a" {
+  zone_id = aws_route53_zone.worldsbestpug_com.zone_id
+  name = "worldsbestpug.com"
+  type = "A"
+  ttl = "300"
+  records = [
+    "173.195.146.139"
   ]
 }
