@@ -49,22 +49,3 @@ module "blog" {
     module.base.aws_security_group_allow_https_ingress_from_all_id
   ]
 }
-
-module "go_carbon_neutral" {
-  source = "../../modules/go-carbon-neutral"
-
-  environment = local.environment
-
-  vpc_id = module.vpc.vpc_id
-  public_subnet_ids = module.vpc.public_subnets
-
-  extra_host_iam_policy = [
-    module.base.aws_iam_policy_access_go_carbon_neutral_ssl_certs_arn
-  ]
-
-  extra_host_security_groups = [
-    module.base.aws_security_group_allow_ssh_ingress_from_all_id,
-    module.base.aws_security_group_allow_http_ingress_from_all_id,
-    module.base.aws_security_group_allow_https_ingress_from_all_id
-  ]
-}

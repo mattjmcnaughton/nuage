@@ -13,10 +13,6 @@ resource "aws_route53_zone" "mattjmcnaughton_io" {
   name = "mattjmcnaughton.io"
 }
 
-resource "aws_route53_zone" "go_carbon_neutral_com" {
-  name = "go-carbon-neutral.com"
-}
-
 resource "aws_route53_zone" "worldsbestpug_com" {
   name = "worldsbestpug.com"
 }
