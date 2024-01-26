@@ -166,7 +166,7 @@ resource "aws_route53_record" "thatsagoodpug_a" {
   type = "A"
   ttl = "300"
   records = [
-    "173.195.146.139"
+    "46.23.81.157"
   ]
 }
 
@@ -176,6 +176,6 @@ resource "aws_route53_record" "worldsbestpug_a" {
   type = "A"
   ttl = "300"
   records = [
-    "173.195.146.139"
+    "46.23.81.157"
   ]
 }
