@@ -4,7 +4,7 @@ locals {
 }
 
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws"
 
   name = "${local.name_prefix}-nuage-vpc"
   cidr = "10.0.0.0/16"
@@ -22,6 +22,13 @@ module "vpc" {
     Terraform = "true"
     project = "nuage"
   }
+
+  # Changes when upgrading the `vpc` module.
+  manage_default_network_acl = false
+  manage_default_route_table = false
+  manage_default_security_group = false
+  enable_dns_hostnames = false
+  map_public_ip_on_launch = true
 }
 
 module "base" {
