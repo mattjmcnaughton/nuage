@@ -62,3 +62,18 @@ module "blog" {
     "www.mattjmcnaughton.com",
   ]
 }
+
+data "aws_route53_zone" "public" {
+  name = "mattjmcnaughton.com."
+}
+
+module "cloudfront_blog" {
+  source = "../../modules/cloudfront-blog"
+
+  environment = local.environment
+
+  route53_zone_id = data.aws_route53_zone.public.zone_id
+  domain_name     = "archive.mattjmcnaughton.com"
+}
+
+# TODO: Need to add the Route53 record for the new blog on `sr.ht`.
