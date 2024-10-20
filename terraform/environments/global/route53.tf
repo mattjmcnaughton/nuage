@@ -158,6 +158,56 @@ resource "aws_route53_record" "fastmail_spf" {
   ]
 }
 
+# Configuration for mattjmcnaughton.com to use fly.io
+
+locals {
+  blog_fly_io_hostname = "blog-hidden-brook-3429.fly.dev"
+
+  # Run `fly ips list` from project root.
+  blog_fly_io_ipv4 = "66.241.125.186"
+  blog_fly_io_ipv6 = "2a09:8280:1::4b:bafb:0"
+
+  blog_mattjmcnaughton_cnames = [
+    "www.mattjmcnaughton.com",
+    "blog.mattjmcnaughton.com",
+  ]
+}
+
+# See https://fly.io/docs/networking/custom-domain/.
+# We configure SSL via https://fly.io/docs/networking/custom-domain/#get-certified.
+
+resource "aws_route53_record" "mattjmcnaughton_a" {
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name = "mattjmcnaughton.com"
+  type = "A"
+  ttl = "300"
+  records = [
+    local.blog_fly_io_ipv4
+  ]
+}
+
+resource "aws_route53_record" "mattjmcnaughton_aaaa" {
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name = "mattjmcnaughton.com"
+  type = "AAAA"
+  ttl = "300"
+  records = [
+    local.blog_fly_io_ipv6
+  ]
+}
+
+resource "aws_route53_record" "mattjmcnaughton_cname" {
+  for_each = toset(local.blog_mattjmcnaughton_cnames)
+
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name = each.key
+  type = "CNAME"
+  ttl = "300"
+  records = [
+    local.blog_fly_io_hostname
+  ]
+}
+
 # Configuration for Pug websites to use sr.ht pages
 
 resource "aws_route53_record" "thatsagoodpug_a" {
