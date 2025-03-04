@@ -1,8 +1,9 @@
-# nuage
+# nuage (deprecated)
 
-`nuage` manages my personal computing in the cloud.
+`nuage` managed my personal computing in the cloud prior to 2025-03. It is now
+**deprecated**.
 
-## Cloud support
+We've moved to [homelab](https://github.com/mattjmcnaughton/homelab).
 
-Currently, we only interact with AWS. However, we attempt to make decisions in
-as cloud agnostic a way as possible.
+The final exception is we need to port the `global` terraform environment (i.e.
+Route53 management, etc).
