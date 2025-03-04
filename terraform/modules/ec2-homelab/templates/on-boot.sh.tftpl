@@ -1,0 +1,10 @@
+#!/bin/bash
+echo "Starting custom boot script"
+
+set -e
+
+# Run `nvidia-smi` as root to ensure all drivers loaded properly. TBD why exactly
+# this is necessary.
+nvidia-smi
+
+echo "Custom boot script completed"

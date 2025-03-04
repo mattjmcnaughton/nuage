@@ -37,3 +37,31 @@ module "base" {
   environment = local.environment
   vpc_id      = module.vpc.vpc_id
 }
+
+module "ai" {
+  source = "../../modules/ec2-homelab"
+
+  vpc_id      = module.vpc.vpc_id
+  alert_email = "auto+aws@mattjmcnaughton.com"
+
+  # Optional parameters
+  instance_name     = "ai"
+  username          = "mattjmcnaughton"
+  max_budget        = 20 # $20 per month
+  max_runtime_hours = 4  # 4 hours
+
+  root_volume_size        = 25
+  data_volume_size        = 50
+  data_volume_mount_point = "/encrypted_fs"
+
+  secrets_manager_tailscale_auth_key_name = "homelab/tailscale/ai"
+
+  instance_type   = "g4dn.xlarge"
+  is_gpu_instance = true # Install GPU drivers and tools
+
+  tags = {
+    environment  = "prod"
+    status       = "experimental"
+    machineclass = "pet"
+  }
+}

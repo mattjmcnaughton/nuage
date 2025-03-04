@@ -1,0 +1,11 @@
+[Unit]
+Description=On Boot Tasks
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/on-boot.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

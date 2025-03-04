@@ -1,0 +1,155 @@
+#!/bin/bash
+echo "Starting custom launch script"
+
+set -e
+
+# Set the hostname
+hostname ${instance_name}
+
+# Update package list
+apt update -y
+
+# Install Amazon SSM Agent
+snap install amazon-ssm-agent --classic
+systemctl enable snap.amazon-ssm-agent.amazon-ssm-agent.service
+systemctl start snap.amazon-ssm-agent.amazon-ssm-agent.service
+
+# Install AWS CLI
+snap install aws-cli --classic
+
+# Install basic packages
+apt install -y curl gnupg jq
+
+# Install development tools
+apt install -y neovim git
+
+# Install Docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$UBUNTU_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt update
+apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+systemctl start docker
+systemctl enable docker
+
+%{ if is_gpu_instance }
+# Install GPU drivers
+apt install -y nvidia-driver-535
+apt install -y nvidia-utils-535
+apt install -y nvidia-cuda-toolkit
+
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+apt update -y
+apt install -y nvidia-container-toolkit
+
+nvidia-ctk runtime configure --runtime=docker
+systemctl restart docker
+
+apt install -y nvtop
+%{ endif }
+
+# Install Tailscale
+curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.gpg | apt-key add -
+curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.list | tee /etc/apt/sources.list.d/tailscale.list
+apt update -y
+apt install -y tailscale
+systemctl enable --now tailscaled
+
+# Start tailscale daemon
+ts_auth_key="$(aws secretsmanager get-secret-value --region us-east-1 --secret-id ${tailscale_auth_key_name} --query SecretString --output text | jq -r .auth_key)"
+
+# tailscale will remember this configuration. We disable "node expiry" meaning
+# the tailscale auth should last forever.
+#
+# tailscale will survive reboot (i.e. be on tailnet and accessible via ssh).
+tailscale up --ssh --auth-key "$ts_auth_key" --hostname=${instance_name}
+
+# Create the script to run on-boot (i.e. anytime the machine starts).
+cat > /etc/systemd/system/on-boot.service << 'EOF'
+${on_boot_service}
+EOF
+
+cat > /usr/local/bin/on-boot.sh << 'EOF'
+${on_boot_script}
+EOF
+
+chmod +x /usr/local/bin/on-boot.sh
+systemctl enable on-boot.service
+
+# Set up the additional EBS volume if requested
+%{ if data_volume_size > 0 }
+echo "Create user without home directory"
+useradd -M -s /bin/bash ${username}
+
+# Install btrfs tools
+apt-get install -y btrfs-progs
+
+while [ ! -e /dev/nvme1n1 ] && [ ! -e /dev/xvdf ]; do
+  sleep 5
+  echo "Waiting for EBS volume to be attached..."
+done
+
+# Determine device name (could be /dev/xvdf or /dev/nvme1n1 depending on the instance type)
+DEVICE_NAME=""
+if [ -e /dev/nvme2n1 ]; then
+  DEVICE_NAME="/dev/nvme2n1"
+elif [ -e /dev/xvdf ]; then
+  DEVICE_NAME="/dev/xvdf"
+else
+  echo "Could not find the attached EBS volume"
+  exit 1
+fi
+
+# Check if the volume is already formatted
+if ! blkid $DEVICE_NAME | grep -q btrfs; then
+  echo "Formatting EBS volume with btrfs..."
+  mkfs.btrfs -L data $DEVICE_NAME
+fi
+
+# Create mount point
+mkdir -p ${data_volume_mount_point}
+
+# Add to fstab for auto-mounting on boot
+if ! grep -q "$DEVICE_NAME ${data_volume_mount_point}" /etc/fstab; then
+  echo "$DEVICE_NAME ${data_volume_mount_point} btrfs defaults,noatime 0 2" >> /etc/fstab
+fi
+
+# Mount the volume
+mount ${data_volume_mount_point}
+
+# Set permissions
+chown root:root ${data_volume_mount_point}
+chmod 755 ${data_volume_mount_point}
+
+# Create a home directory structure on the btrfs filesystem
+mkdir -p ${data_volume_mount_point}/home/${username}
+chown ${username}:${username} ${data_volume_mount_point}/home/${username}
+chmod 750 ${data_volume_mount_point}/home/${username}
+
+# Create symlink from /home/$USERNAME to $DATA_MOUNT/home/$USERNAME
+ln -sf ${data_volume_mount_point}/home/${username} /home/${username}
+
+# Make sure permissions are correct
+chown -h ${username}:${username} /home/${username}
+%{ else }%
+echo "Create user with home directory"
+useradd -m -s /bin/bash ${username}
+%{ endif }
+
+mkdir -p /home/${username}/.ssh
+chmod 700 /home/${username}/.ssh
+
+# Add user to sudo and docker groups
+usermod -aG sudo ${username}
+usermod -aG docker ${username}
+
+# Set up passwordless sudo for this user
+echo "${username} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${username}
+chmod 440 /etc/sudoers.d/${username}
+
+# Run `nvidia-smi` as root to ensure all drivers loaded properly. TBD why exactly
+# this is necessary.
+nvidia-smi
+
+echo "Custom launch script completed"
