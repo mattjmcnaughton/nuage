@@ -20,9 +20,9 @@ resource "aws_route53_zone" "thatsagoodpug_com" {
 
 resource "aws_route53_record" "fastmail_mx" {
   zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
-  name = "mattjmcnaughton.com"
-  type = "MX"
-  ttl = "300"
+  name    = "mattjmcnaughton.com"
+  type    = "MX"
+  ttl     = "300"
   records = [
     "10 in1-smtp.messagingengine.com",
     "20 in2-smtp.messagingengine.com"
@@ -34,9 +34,9 @@ resource "aws_route53_record" "fastmail_mx" {
 
 resource "aws_route53_record" "fastmail_dkim_1" {
   zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
-  name = "fm1._domainkey"
-  type = "CNAME"
-  ttl = "300"
+  name    = "fm1._domainkey"
+  type    = "CNAME"
+  ttl     = "300"
   records = [
     "fm1.mattjmcnaughton.com.dkim.fmhosted.com"
   ]
@@ -44,9 +44,9 @@ resource "aws_route53_record" "fastmail_dkim_1" {
 
 resource "aws_route53_record" "fastmail_dkim_2" {
   zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
-  name = "fm2._domainkey"
-  type = "CNAME"
-  ttl = "300"
+  name    = "fm2._domainkey"
+  type    = "CNAME"
+  ttl     = "300"
   records = [
     "fm2.mattjmcnaughton.com.dkim.fmhosted.com"
   ]
@@ -54,9 +54,9 @@ resource "aws_route53_record" "fastmail_dkim_2" {
 
 resource "aws_route53_record" "fastmail_dkim_3" {
   zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
-  name = "fm3._domainkey"
-  type = "CNAME"
-  ttl = "300"
+  name    = "fm3._domainkey"
+  type    = "CNAME"
+  ttl     = "300"
   records = [
     "fm3.mattjmcnaughton.com.dkim.fmhosted.com"
   ]
@@ -66,9 +66,9 @@ resource "aws_route53_record" "fastmail_dkim_3" {
 
 resource "aws_route53_record" "fastmail_spf" {
   zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
-  name = "mattjmcnaughton.com"  # Route53 is weird about us using "@" so specify full domain.
-  type = "TXT"
-  ttl = "300"
+  name    = "mattjmcnaughton.com" # Route53 is weird about us using "@" so specify full domain.
+  type    = "TXT"
+  ttl     = "300"
   records = [
     "v=spf1 include:spf.messagingengine.com ?all"
   ]
@@ -80,9 +80,9 @@ resource "aws_route53_record" "fastmail_spf" {
 # independently re-pointed in the future with a single change each.
 
 locals {
-  blog_fly_io_hostname = "blog-hidden-brook-3429.fly.dev"
-  blog_fly_io_ipv4     = "66.241.125.186"  # Run `fly ips list` from project root.
-  blog_fly_io_ipv6     = "2a09:8280:1::4b:bafb:0"
+  blog_fly_io_hostname = "mattjmcnaughton-blog-v2.fly.dev"
+  blog_fly_io_ipv4     = "66.241.124.180" # Run `fly ips list` from project root.
+  blog_fly_io_ipv6     = "2a09:8280:1::dc:f229:0"
 
   legacy_fly_io_hostname = "blog-hidden-brook-3429.fly.dev"
   legacy_fly_io_ipv4     = "66.241.125.186"
@@ -145,9 +145,9 @@ resource "aws_route53_record" "legacy_mattjmcnaughton_cname" {
 
 resource "aws_route53_record" "thatsagoodpug_a" {
   zone_id = aws_route53_zone.thatsagoodpug_com.zone_id
-  name = "thatsagoodpug.com"
-  type = "A"
-  ttl = "300"
+  name    = "thatsagoodpug.com"
+  type    = "A"
+  ttl     = "300"
   records = [
     "46.23.81.157"
   ]
@@ -155,9 +155,9 @@ resource "aws_route53_record" "thatsagoodpug_a" {
 
 resource "aws_route53_record" "worldsbestpug_a" {
   zone_id = aws_route53_zone.worldsbestpug_com.zone_id
-  name = "worldsbestpug.com"
-  type = "A"
-  ttl = "300"
+  name    = "worldsbestpug.com"
+  type    = "A"
+  ttl     = "300"
   records = [
     "46.23.81.157"
   ]
