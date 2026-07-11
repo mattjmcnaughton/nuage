@@ -88,6 +88,8 @@ locals {
   legacy_fly_io_ipv4     = "66.241.125.186"
   legacy_fly_io_ipv6     = "2a09:8280:1::4b:bafb:0"
 
+  habagou_fly_io_hostname = "habagou.fly.dev"
+
   blog_mattjmcnaughton_cnames = [
     "www.mattjmcnaughton.com",
     "blog.mattjmcnaughton.com",
@@ -95,6 +97,10 @@ locals {
 
   legacy_mattjmcnaughton_cnames = [
     "legacy.mattjmcnaughton.com",
+  ]
+
+  habagou_mattjmcnaughton_cnames = [
+    "habagou.mattjmcnaughton.com",
   ]
 }
 
@@ -139,6 +145,18 @@ resource "aws_route53_record" "legacy_mattjmcnaughton_cname" {
   type    = "CNAME"
   ttl     = "300"
   records = [local.legacy_fly_io_hostname]
+}
+
+# Habagou (habagou.mattjmcnaughton.com)
+
+resource "aws_route53_record" "habagou_mattjmcnaughton_cname" {
+  for_each = toset(local.habagou_mattjmcnaughton_cnames)
+
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name    = each.key
+  type    = "CNAME"
+  ttl     = "300"
+  records = [local.habagou_fly_io_hostname]
 }
 
 # Configuration for Pug websites to use sr.ht pages
