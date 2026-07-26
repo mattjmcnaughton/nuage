@@ -90,6 +90,8 @@ locals {
 
   habagou_fly_io_hostname = "habagou.fly.dev"
 
+  aleph_fly_io_hostname = "aleph-prod-mattjmcnaughton.fly.dev"
+
   blog_mattjmcnaughton_cnames = [
     "www.mattjmcnaughton.com",
     "blog.mattjmcnaughton.com",
@@ -101,6 +103,10 @@ locals {
 
   habagou_mattjmcnaughton_cnames = [
     "habagou.mattjmcnaughton.com",
+  ]
+
+  aleph_mattjmcnaughton_cnames = [
+    "aleph.mattjmcnaughton.com",
   ]
 }
 
@@ -157,6 +163,18 @@ resource "aws_route53_record" "habagou_mattjmcnaughton_cname" {
   type    = "CNAME"
   ttl     = "300"
   records = [local.habagou_fly_io_hostname]
+}
+
+# Aleph (aleph.mattjmcnaughton.com)
+
+resource "aws_route53_record" "aleph_mattjmcnaughton_cname" {
+  for_each = toset(local.aleph_mattjmcnaughton_cnames)
+
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name    = each.key
+  type    = "CNAME"
+  ttl     = "300"
+  records = [local.aleph_fly_io_hostname]
 }
 
 # Configuration for Pug websites to use sr.ht pages
