@@ -6,7 +6,7 @@ authors = ["mattjmcnaughton <mattjmcnaughton@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-ansible = "^2.9"
+ansible = "^4.2"
 boto3 = "^1.20.18"
 
 [tool.poetry.dev-dependencies]
