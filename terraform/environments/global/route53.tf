@@ -92,6 +92,8 @@ locals {
 
   aleph_fly_io_hostname = "aleph-prod-mattjmcnaughton.fly.dev"
 
+  lomme_fly_io_hostname = "lomme-prod-mattjmcnaughton.fly.dev"
+
   blog_mattjmcnaughton_cnames = [
     "www.mattjmcnaughton.com",
     "blog.mattjmcnaughton.com",
@@ -107,6 +109,10 @@ locals {
 
   aleph_mattjmcnaughton_cnames = [
     "aleph.mattjmcnaughton.com",
+  ]
+
+  lomme_mattjmcnaughton_cnames = [
+    "lomme.mattjmcnaughton.com",
   ]
 }
 
@@ -175,6 +181,18 @@ resource "aws_route53_record" "aleph_mattjmcnaughton_cname" {
   type    = "CNAME"
   ttl     = "300"
   records = [local.aleph_fly_io_hostname]
+}
+
+# Lomme (lomme.mattjmcnaughton.com)
+
+resource "aws_route53_record" "lomme_mattjmcnaughton_cname" {
+  for_each = toset(local.lomme_mattjmcnaughton_cnames)
+
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name    = each.key
+  type    = "CNAME"
+  ttl     = "300"
+  records = [local.lomme_fly_io_hostname]
 }
 
 # Configuration for Pug websites to use sr.ht pages
