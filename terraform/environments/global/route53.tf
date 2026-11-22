@@ -195,6 +195,32 @@ resource "aws_route53_record" "lomme_mattjmcnaughton_cname" {
   records = [local.lomme_fly_io_hostname]
 }
 
+# Amp Boxes custom domain (personal account)
+#
+# Amp serves Box apps at <host>.mattjmcnaughton.com through the wildcard below.
+# Explicit records (the Fly CNAMEs above, Fastmail DKIM) take precedence over
+# the wildcard, so they are unaffected. Moving an app to Amp means removing its
+# explicit record so the wildcard answers for it.
+# `amp domains list --user` shows these values.
+
+resource "aws_route53_record" "amp_domain_verification" {
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name    = "_amp-challenge.mattjmcnaughton.com"
+  type    = "TXT"
+  ttl     = "300"
+  records = [
+    "amp-domain-verification=8c8302ceefef438aa38b9895fabcc2906085196f48b64ddaa48edb225c11569b"
+  ]
+}
+
+resource "aws_route53_record" "amp_wildcard_cname" {
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name    = "*.mattjmcnaughton.com"
+  type    = "CNAME"
+  ttl     = "300"
+  records = ["custom-domain.ampcode.com"]
+}
+
 # Configuration for Pug websites to use sr.ht pages
 
 resource "aws_route53_record" "thatsagoodpug_a" {
