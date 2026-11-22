@@ -213,6 +213,15 @@ resource "aws_route53_record" "amp_domain_verification" {
   ]
 }
 
+# Google Certificate Manager DNS authorization for the Amp-issued certificate.
+resource "aws_route53_record" "amp_acme_challenge_cname" {
+  zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
+  name    = "_acme-challenge_g7k2v6l6lx7vbw24.mattjmcnaughton.com"
+  type    = "CNAME"
+  ttl     = "300"
+  records = ["b6ceab2c-55bb-4f31-a2bb-4d70013132de.16.authorize.certificatemanager.goog"]
+}
+
 resource "aws_route53_record" "amp_wildcard_cname" {
   zone_id = aws_route53_zone.mattjmcnaughton_com.zone_id
   name    = "*.mattjmcnaughton.com"
